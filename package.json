@@ -10,7 +10,7 @@
     "test": "echo \"Error: no test specified\" && exit 1",
     "start": "node src/app.js",
     "start:dev": "nodemon -r dotenv/config src/app.js",
-    "build-css": "tailwindcss -i ./src/public/css/styles.css -o ./src/public/css/index.css"
+    "build-css": "tailwindcss -i ./src/public/css/styles.css -o ./src/public/css/index.css --watch"
   },
   "repository": {
     "type": "git",
