@@ -39,3 +39,20 @@ moonIcon.addEventListener('click', () => {
 });
 
 darkModeCheck();
+
+//Hamburger Menu
+const hamburgerIcon = document.getElementById('hamburger-icon');
+const mobileMenu =document.getElementById('mobile-menu');
+const hamburgerClose =document.getElementById('hamburger-close');
+
+const mobileMenuToggle = () =>  {
+    mobileMenu.classList.toggle('-translate-x-full');
+};
+
+hamburgerIcon.addEventListener('click', () => {
+   mobileMenuToggle();
+});
+
+hamburgerClose.addEventListener('click', () => {
+    mobileMenuToggle();
+});
