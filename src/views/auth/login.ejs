@@ -1,0 +1,37 @@
+<%- include('../includes/head.ejs') %>
+</head>
+<%- include('../includes/navigation.ejs') %>
+
+<div class="flex flex-grow">
+    <div class="flex flex-grow font-montserrat justify-center items-start pt-16">
+        <div class="px-8 py-4 text-center">
+            <h1 class="pb-6 text-4xl font-semibold text-primary-green md:text-6xl dark:text-secondary-green">
+                Welcome Back</h1>
+            <p class="pb-4 text-gray-500 dark:text-white">Login to your account</p>
+            <div class="flex justify-center items-center">
+                <form action=""
+                      class="w-full shadow-md rounded px-8 pt-6 pb-8 mb-4 text-sm md:text-base dark:shadow-none">
+                    <input type="email" name="email" id="email" value="" placeholder="Email"
+                           class="appearance-none border-b-2 w-full py-2 px-3 mb-4 text-gray-700 leading-tight focus:outline-none focus:shadow-outline dark:bg-dark-primary-green dark:border-secondary-green dark:text-secondary-green">
+                    <input type="password" name="password" id="password" value="" placeholder="Password"
+                           class="appearance-none border-b-2 w-full py-2 px-3 mb-4 text-gray-700 leading-tight focus:outline-none focus:shadow-outline dark:bg-dark-primary-green dark:border-secondary-green dark:text-secondary-green">
+                    <div class="flex w-full justify-between items-center">
+                        <div class="flex justify-start text-xs md:text-sm items-start text-left py-1.5">
+                            <input type="checkbox" class="mx-2 mt-0.5 md:mt-1 leading-tight"><span class="text-primary-green dark:text-secondary-green">Remember me</span>
+                        </div>
+                        <a class="text-xs md:text-sm text-primary-green dark:text-secondary-green underline">Reset Password</a>
+                    </div>
+
+                    <div class="flex flex-col justify-center items-center">
+                        <button type="submit" class="px-8 py-2 mt-8 rounded-lg bg-primary-green text-white dark:bg-secondary-green dark:text-dark-primary-green">Login</button>
+                        <p class="px-4 py-2 mt-2 text-sm text-primary-green dark:text-secondary-green">
+                            Do not have an account?<br><a href="/signup" class="underline text-primary-green dark:text-secondary-green ">Register here</a></p>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
+
+<%- include('../includes/footer.ejs') %>
+
