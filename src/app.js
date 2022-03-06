@@ -3,12 +3,16 @@ const express = require('express');
 const session = require('express-session');
 const bodyParser = require('body-parser');
 const mongoose = require('mongoose');
+const csrf = require('csurf');
 
 //Custom imports
 const sessionStore = require('./config/database')
 const shopRoutes = require('./routes/shop');
+const authRoutes = require('./routes/auth');
+const errorController = require('./controllers/error');
 
 const app = express();
+const csrfProtection = csrf(undefined);
 
 //.env constants
 const mongo_user = process.env.MONGO_USER;
@@ -30,14 +34,26 @@ app.use(session({
     saveUninitialized: false,
     store: sessionStore,
 }));
-
-app.use('/', (req, res, next) => {
-    req.session.isLoggedIn = true;
+app.use(csrfProtection);
+app.use((req, res, next) => {
+    res.locals.isAuthenticated = req.session.isLoggedIn;
+    res.locals.csrfToken = req.csrfToken();
     next();
 });
 
 //Routes
 app.use(shopRoutes);
+app.use(authRoutes);
+app.use('/500', errorController.get500);
+app.use(errorController.get404);
+app.use((error, req, res, next) => {
+    res.status(500)
+        .render('500', {
+            pageTitle: 'Error!',
+            path: '/500',
+            isAutheticated: req.session.isLoggedIn
+        });
+});
 
 mongoose.connect(mongodb_uri)
     .then(() => {
