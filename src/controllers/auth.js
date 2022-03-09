@@ -10,6 +10,7 @@ exports.getSignUp = (req, res, next) => {
     res.render('auth/signup', {
         pageTitle: "Sign Up",
         path: '/signup',
+        oldInput: {username: '', email: '', password: ''},
         validationErrors: []
     });
 };
@@ -25,7 +26,7 @@ exports.postSignUp = (req, res, next) => {
     const username = req.body.username;
     const email = req.body.email;
     const password = req.body.password;
-    const optInNewsletter = req.body.newsletter;
+    const optInNewsletter = (req.body.newsletter === 'newsletter') ? true : false;
 
     const errors = validationResult(req);
     if (!errors.isEmpty()) {
@@ -33,14 +34,29 @@ exports.postSignUp = (req, res, next) => {
             .render('auth/signup', {
                 pageTitle: 'SignUp',
                 path: '/signup',
+                oldInput: {username: username, email: email, password: password},
                 errorMessage: errors.array(),
                 validationErrors: errors.array()
             });
     }
 
-    res.render('auth/signup', {
-        pageTitle: 'Sign Up',
-        path: '/signup',
-        validationErrors: []
-    });
+    return bcrypt
+        .hash(password, 12)
+        .then(hashedPassword => {
+            const user = new User({
+                email: email,
+                password: hashedPassword,
+                username: username,
+                optInNewsletter: optInNewsletter,
+            });
+            return user.save();
+        })
+        .then(result => {
+            res.redirect('/login');
+        })
+        .catch(err => {
+            const error = new Error(err);
+            error.httpStatusCode = 500;
+            return next(error);
+        });
 };

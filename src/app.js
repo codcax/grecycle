@@ -10,6 +10,7 @@ const sessionStore = require('./config/database')
 const shopRoutes = require('./routes/shop');
 const authRoutes = require('./routes/auth');
 const errorController = require('./controllers/error');
+const User = require('./models/user');
 
 const app = express();
 const csrfProtection = csrf(undefined);
@@ -39,6 +40,26 @@ app.use((req, res, next) => {
     res.locals.isAuthenticated = req.session.isLoggedIn;
     res.locals.csrfToken = req.csrfToken();
     next();
+});
+
+app.use((req, res, next) => {
+    if (!req.session.user) {
+        return next();
+    };
+
+    User.findById(req.session.user_id)
+        .then(user => {
+            if (!user) {
+                return next();
+            }
+            req.user = user;
+            next();
+        })
+        .catch(err => {
+            const error = new Error(err);
+            error.httpStatusCode = 500;
+            next(error);
+        });
 });
 
 //Routes
