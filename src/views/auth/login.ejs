@@ -17,15 +17,23 @@
                            class="appearance-none border-b-2 w-full py-2 px-3 mb-4 text-gray-700 leading-tight focus:outline-none focus:shadow-outline dark:bg-dark-primary-green dark:border-secondary-green dark:text-secondary-green">
                     <div class="flex w-full justify-between items-center">
                         <div class="flex justify-start text-xs md:text-sm items-start text-left py-1.5">
-                            <input type="checkbox" class="mx-2 mt-0.5 md:mt-1 leading-tight"><span class="text-primary-green dark:text-secondary-green">Remember me</span>
+                            <input type="checkbox" class="mx-2 mt-0.5 md:mt-1 leading-tight"><span
+                                    class="text-primary-green dark:text-secondary-green">Remember me</span>
                         </div>
-                        <a class="text-xs md:text-sm text-primary-green dark:text-secondary-green underline">Reset Password</a>
+                        <a class="text-xs md:text-sm text-primary-green dark:text-secondary-green underline">Reset
+                            Password</a>
                     </div>
+                    <input type="hidden" name="_csrf" value="<%= csrfToken %>">
 
                     <div class="flex flex-col justify-center items-center">
-                        <button type="submit" class="px-8 py-2 mt-8 rounded-lg bg-primary-green text-white dark:bg-secondary-green dark:text-dark-primary-green">Login</button>
+                        <button type="submit"
+                                class="px-8 py-2 mt-8 rounded-lg bg-primary-green text-white dark:bg-secondary-green dark:text-dark-primary-green">
+                            Login
+                        </button>
                         <p class="px-4 py-2 mt-2 text-sm text-primary-green dark:text-secondary-green">
-                            Do not have an account?<br><a href="/signup" class="underline text-primary-green dark:text-secondary-green ">Register here</a></p>
+                            Do not have an account?<br><a href="/signup"
+                                                          class="underline text-primary-green dark:text-secondary-green ">Register
+                                here</a></p>
                     </div>
                 </form>
             </div>
