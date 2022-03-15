@@ -9,18 +9,35 @@
                 Welcome Back</h1>
             <p class="pb-4 text-gray-500 dark:text-white">Login to your account</p>
             <div class="flex justify-center items-center">
-                <form action=""
-                      class="w-full shadow-md rounded px-8 pt-6 pb-8 mb-4 text-sm md:text-base dark:shadow-none">
-                    <input type="email" name="email" id="email" value="" placeholder="Email"
-                           class="appearance-none border-b-2 w-full py-2 px-3 mb-4 text-gray-700 leading-tight focus:outline-none focus:shadow-outline dark:bg-dark-primary-green dark:border-secondary-green dark:text-secondary-green">
-                    <input type="password" name="password" id="password" value="" placeholder="Password"
-                           class="appearance-none border-b-2 w-full py-2 px-3 mb-4 text-gray-700 leading-tight focus:outline-none focus:shadow-outline dark:bg-dark-primary-green dark:border-secondary-green dark:text-secondary-green">
-                    <div class="flex w-full justify-between items-center">
-                        <div class="flex justify-start text-xs md:text-sm items-start text-left py-1.5">
-                            <input type="checkbox" class="mx-2 mt-0.5 md:mt-1 leading-tight"><span
+                <form action="/login" method="POST" novalidate
+                      class="flex-1 shadow-md rounded px-8 pt-6 pb-8 mb-4 text-sm md:text-base sm:w-2/3 dark:shadow-none">
+                    <input type="email" name="email" id="email" placeholder="Email" value="<%= oldInput.email %>"
+                           class="appearance-none border-b-2 w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline dark:bg-dark-primary-green dark:border-secondary-green dark:text-secondary-green
+                                    <%= validationErrors.find(error => error.param === 'email') ? 'border-red-300 dark:border-red-300' : 'mb-4' %>">
+                    <% if(validationErrors.find(error => error.param === 'email')) { %>
+                        <div class="flex flex-col justify-start items-start text-left text-xs mt-2 mb-4 px-2 rounded-lg">
+                            <% errorMessage.find(error => { if(error.param === 'email') {const emailError = error.msg %>
+                            <p class="text-red-500"><%= emailError %></p>
+                            <% }}) %>
+                        </div>
+                    <% } %>
+                    <input type="password" name="password" id="password" placeholder="Password"
+                           value="<%= oldInput.password %>"
+                           class="appearance-none border-b-2 w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline dark:bg-dark-primary-green dark:border-secondary-green dark:text-secondary-green
+                                    <%= validationErrors.find(error => error.param === 'password') ? 'border-red-300 dark:border-red-300' : '' %>">
+                    <% if(validationErrors.find(error => error.param === 'password')) { %>
+                        <div class="flex flex-col justify-start items-start text-left text-xs mt-2 px-2 rounded-lg">
+                            <% errorMessage.find(error => { if(error.param === 'password') {const passwordError = error.msg %>
+                            <p class="text-red-500"><%= passwordError %></p>
+                            <% }}) %>
+                        </div>
+                    <% } %>
+                    <div class="flex flex-col w-full justify-start items-start mt-4 sm:flex-row sm:justify-between sm:items-center">
+                        <div class="flex text-xs md:text-sm text-left py-1.5">
+                            <input type="checkbox" name="rememberMe" id="rememberMe" value="rememberMe" class="mx-2 mt-0.5 md:mt-1 leading-tight"><span
                                     class="text-primary-green dark:text-secondary-green">Remember me</span>
                         </div>
-                        <a class="text-xs md:text-sm text-primary-green dark:text-secondary-green underline">Reset
+                        <a class="text-xs mx-2 sm:mx-0 md:text-sm text-primary-green dark:text-secondary-green underline">Reset
                             Password</a>
                     </div>
                     <input type="hidden" name="_csrf" value="<%= csrfToken %>">
