@@ -7,7 +7,7 @@ const {check, body} = require('express-validator/check');
 const authController = require('../controllers/auth');
 const User = require('../models/user');
 
-router.get('/signup',authController.getSignUp);
+router.get('/signup', authController.getSignUp);
 router.post('/signup',
     [
         body('username', 'Username is invalid.')
@@ -21,7 +21,8 @@ router.post('/signup',
                 return User.findOne({email: value}).then(fetchedUser => {
                     if (fetchedUser) {
                         return Promise.reject('Email address already taken.');
-                    };
+                    }
+                    ;
                 });
             })
             .normalizeEmail(),
@@ -43,5 +44,15 @@ router.post('/signup',
     ],
     authController.postSignUp);
 router.get('/login', authController.getLogin);
+router.post('/login',
+    [
+        check('email')
+            .isEmail()
+            .withMessage('Email address is invalid.')
+            .normalizeEmail(),
+        body('password', 'Password is invalid.')
+            .trim()
+    ],
+    authController.postLogin);
 
 module.exports = router;

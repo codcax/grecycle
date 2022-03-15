@@ -18,7 +18,9 @@ exports.getSignUp = (req, res, next) => {
 exports.getLogin = (req, res, next) => {
     res.render('auth/login', {
         pageTitle: 'Login',
-        path: '/login'
+        path: '/login',
+        oldInput: {email: '', password: ''},
+        validationErrors: []
     });
 };
 
@@ -53,6 +55,72 @@ exports.postSignUp = (req, res, next) => {
         })
         .then(result => {
             res.redirect('/login');
+        })
+        .catch(err => {
+            const error = new Error(err);
+            error.httpStatusCode = 500;
+            return next(error);
+        });
+};
+
+exports.postLogin = (req, res, next) => {
+    const email = req.body.email;
+    const password = req.body.password;
+    const rememberMe = (req.body.rememberMe === 'rememberMe') ? true : false;
+
+    const errors = validationResult(req);
+    if (!errors.isEmpty()) {
+        return res.status(422)
+            .render('auth/login', {
+                pageTitle: 'Login',
+                path: '/login',
+                oldInput: {email: email, password: password},
+                errorMessage: errors.array(),
+                validationErrors: errors.array()
+            });
+    }
+
+    User.findOne({email: email})
+        .then(user => {
+            if (!user) {
+                let errors = [{param: 'email', msg: 'Invalid credentials'}];
+                return res.status(422)
+                    .render('auth/login', {
+                        pageTitle: 'Login',
+                        path: '/login',
+                        oldInput: {email: email, password: password},
+                        errorMessage: errors,
+                        validationErrors: errors
+                    });
+            }
+
+            bcrypt.compare(password, user.password)
+                .then(passwordMatch => {
+                    if (passwordMatch) {
+                        req.session.isLoggedIn = true;
+                        req.session.user = user;
+                        if (rememberMe) {
+                            req.session.maxAge = 2147483647;
+                        }
+                        return req.session.save((err) => {
+                            console.log(err);
+                            res.redirect('/');
+                        });
+                    }
+                    let errors = [{param: 'password', msg: 'Invalid credentials'}];
+                    return res.status(422)
+                        .render('auth/login', {
+                            pageTitle: 'Login',
+                            path: '/login',
+                            oldInput: {email: email, password: password},
+                            errorMessage: errors,
+                            validationErrors: errors
+                        });
+                })
+                .catch(err => {
+                    console.log(err);
+                    res.redirect('/login');
+                });
         })
         .catch(err => {
             const error = new Error(err);
