@@ -25,7 +25,12 @@
             <li class="text-primary-green dark:text-secondary-green px-6">Login</li>
         <% } else { %>
             <li class="text-primary-green dark:text-secondary-green px-6">Account</li>
-            <li class="text-primary-green dark:text-secondary-green px-6">Logout</li>
+            <li class="text-primary-green dark:text-secondary-green px-6">
+                <form action="/logout" method="POST">
+                    <input type="hidden" name="_csrf" value="<%= csrfToken %>">
+                    <button type="submit" class="">Logout</button>
+                </form>
+            </li>
         <% } %>
     </ul>
 </div>
