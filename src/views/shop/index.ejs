@@ -18,7 +18,8 @@
 
             <a class="px-4 py-2 text-primary-green text-lg border-2 border-primary-green rounded-full sm:text-2xl
             sm:px-6 hover:bg-primary-green hover:border-primary-green hover:text-secondary-green  dark:border-dark-secondary-green dark:hover:bg-secondary-green dark:hover:border-secondary-green
-                dark:text-dark-secondary-green dark:hover:text-dark-primary-green" href="/signup">Start Now
+                dark:text-dark-secondary-green dark:hover:text-dark-primary-green"
+               href="<% if (!isAuthenticated){ %>/signup<% } else { %>/account<% } %>"><% if (!isAuthenticated){ %>Start Now<% } else { %>My Account<% } %>
             </a>
         </div>
     </div>

@@ -3,12 +3,14 @@
     <img src="/images/sun-img.svg" alt="" class="h-10 sun cursor-pointer">
     <img src="/images/moon-img.svg" alt="" class="h-8 moon cursor-pointer">
 </div>
-<div id="hamburger-icon" class="fixed z-10 top-4 left-4 h-10 w-10 px-1 py-2 space-y-1.5 cursor-pointer md:top-8 md:left-8 lg:hidden">
+<div id="hamburger-icon"
+     class="fixed z-10 top-4 left-4 h-10 w-10 px-1 py-2 space-y-1.5 cursor-pointer md:top-8 md:left-8 lg:hidden">
     <div class="bg-primary-green h-0.5 rounded-md dark:bg-secondary-green"></div>
     <div class="bg-primary-green h-0.5 w-2/3 rounded-md dark:bg-secondary-green"></div>
     <div class="bg-primary-green h-0.5 rounded-md dark:bg-secondary-green"></div>
 </div>
-<div id="mobile-menu" class="z-20 absolute h-screen w-screen flex flex-col justify-center items-center p-8 bg-white transform -translate-x-full transition duration-500 ease-out dark:bg-dark-primary-green">
+<div id="mobile-menu"
+     class="z-20 absolute h-screen w-screen flex flex-col justify-center items-center p-8 bg-white transform -translate-x-full transition duration-500 ease-out dark:bg-dark-primary-green">
     <div class="flex w-full pb-4 px-4 justify-between items-center border-b-2 border-primary-green dark:border-secondary-green">
         <h1 class="text-2xl font-semibold tracking-widest text-primary-green dark:text-secondary-green">Grecycle</h1>
         <a id="hamburger-close" class="text-primary-green dark:text-secondary-green cursor-pointer">Close</a>
@@ -18,8 +20,13 @@
         <li class="text-primary-green dark:text-secondary-green px-6">About Us</li>
         <li class="text-primary-green dark:text-secondary-green px-6">Services</li>
         <li class="text-primary-green dark:text-secondary-green px-6">Contact Us</li>
-        <li class="text-primary-green dark:text-secondary-green px-6">Sign Up</li>
-        <li class="text-primary-green dark:text-secondary-green px-6">Login</li>
+        <% if (!isAuthenticated) { %>
+            <li class="text-primary-green dark:text-secondary-green px-6">Sign Up</li>
+            <li class="text-primary-green dark:text-secondary-green px-6">Login</li>
+        <% } else { %>
+            <li class="text-primary-green dark:text-secondary-green px-6">Account</li>
+            <li class="text-primary-green dark:text-secondary-green px-6">Logout</li>
+        <% } %>
     </ul>
 </div>
 <nav class="hidden lg:block flex justify-center items-center px-12 py-8 xl:px-24">
