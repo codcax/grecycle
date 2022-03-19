@@ -9,6 +9,7 @@ const csrf = require('csurf');
 const sessionStore = require('./config/database')
 const shopRoutes = require('./routes/shop');
 const authRoutes = require('./routes/auth');
+const userRoutes = require('./routes/user');
 const errorController = require('./controllers/error');
 const User = require('./models/user');
 
@@ -65,6 +66,7 @@ app.use((req, res, next) => {
 //Routes
 app.use(shopRoutes);
 app.use(authRoutes);
+app.use('/user',userRoutes);
 app.use('/500', errorController.get500);
 app.use(errorController.get404);
 app.use((error, req, res, next) => {
@@ -73,7 +75,7 @@ app.use((error, req, res, next) => {
         .render('errors/500', {
             pageTitle: 'Error!',
             path: '/500',
-            isAutheticated: req.session.isLoggedIn
+            isAuthenticated: req.session.isLoggedIn
         });
 });
 

@@ -16,15 +16,15 @@
         <a id="hamburger-close" class="text-primary-green dark:text-secondary-green cursor-pointer">Close</a>
     </div>
     <ul class="flex-1 pt-24 text-center text-2xl space-y-4">
-        <li class="text-primary-green dark:text-secondary-green px-6">Home</li>
-        <li class="text-primary-green dark:text-secondary-green px-6">About Us</li>
-        <li class="text-primary-green dark:text-secondary-green px-6">Services</li>
-        <li class="text-primary-green dark:text-secondary-green px-6">Contact Us</li>
+        <li class="text-primary-green dark:text-secondary-green px-6"><a href="/" class="">Home</a></li>
+        <li class="text-primary-green dark:text-secondary-green px-6"><a href="/about" class="">About Us</a></li>
+        <li class="text-primary-green dark:text-secondary-green px-6"><a href="/services" class="">Services</a></li>
+        <li class="text-primary-green dark:text-secondary-green px-6"><a href="/contact" class="">Contact Us</a></li>
         <% if (!isAuthenticated) { %>
-            <li class="text-primary-green dark:text-secondary-green px-6">Sign Up</li>
-            <li class="text-primary-green dark:text-secondary-green px-6">Login</li>
+            <li  class="text-primary-green dark:text-secondary-green px-6"><a href="/signup" class="">Sign Up</a></li>
+            <li  class="text-primary-green dark:text-secondary-green px-6"><a href="/login" class="">Login</a></li>
         <% } else { %>
-            <li class="text-primary-green dark:text-secondary-green px-6">Account</li>
+            <li class="text-primary-green dark:text-secondary-green px-6"><a href="/user/account" class="">Account</a></li>
             <li class="text-primary-green dark:text-secondary-green px-6">
                 <form action="/logout" method="POST">
                     <input type="hidden" name="_csrf" value="<%= csrfToken %>">
@@ -37,9 +37,9 @@
 <nav class="hidden lg:block flex justify-center items-center px-12 py-8 xl:px-24">
     <div class="text-xl mx-12 xl:text-2xl">
         <ul class="flex justify-center items-center font-semibold cursor-pointer">
-            <li class="text-primary-green dark:text-secondary-green px-6">Home</li>
-            <li class="text-primary-green dark:text-secondary-green px-6">About Us</li>
-            <li class="text-primary-green dark:text-secondary-green px-6">Services</li>
+            <li class="text-primary-green dark:text-secondary-green px-6"><a href="/" class="">Home</a></li>
+            <li class="text-primary-green dark:text-secondary-green px-6"><a href="/about" class="">About Us</a></li>
+            <li class="text-primary-green dark:text-secondary-green px-6"><a href="/services" class="">Services</a></li>
         </ul>
     </div>
 </nav>
