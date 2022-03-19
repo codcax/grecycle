@@ -8,36 +8,36 @@
         <div class="m-2 w-full sm:w-2/4">
             <form action="/user/account" method="POST" class="flex flex-col justify-center items-center mt-6" novalidate>
                 <input type="text" name="username" id="username" placeholder="Username" value="<%= userDetails.username %>"
-                       class="appearance-none border-b-2 w-3/4 py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline dark:bg-dark-primary-green dark:border-secondary-green dark:text-secondary-green <%= validationErrors.find(error => error.param === 'username') ? 'border-red-300 dark:border-red-300' : '' %>">
+                       class="appearance-none border-b-2 w-3/4 py-2 text-gray-700 leading-tight focus:outline-none focus:shadow-outline dark:bg-dark-primary-green dark:border-secondary-green dark:text-secondary-green <%= validationErrors.find(error => error.param === 'username') ? 'border-red-300 dark:border-red-300' : '' %>">
                 <% if(validationErrors.find(error => error.param === 'username')) { %>
-                    <div class="flex flex-col justify-start items-start w-3/4 pt-2 px-3 text-xs rounded-lg">
+                    <div class="flex flex-col justify-start items-start w-3/4 pt-2 text-xs rounded-lg">
                         <% errorMessage.find(error => { if(error.param === 'username') {const username = error.msg %>
                         <p class="text-red-500"><%= username %></p>
                         <% }}) %>
                     </div>
                 <% } %>
                 <input type="email" name="email" id="email" placeholder="Email" value="<%= userDetails.email %>"
-                       class="appearance-none border-b-2 w-3/4 py-2 px-3 mt-4 text-gray-700 leading-tight focus:outline-none focus:shadow-outline dark:bg-dark-primary-green dark:border-secondary-green dark:text-secondary-green <%= validationErrors.find(error => error.param === 'email') ? 'border-red-300 dark:border-red-300' : '' %>">
+                       class="appearance-none border-b-2 w-3/4 py-2 mt-4 text-gray-700 leading-tight focus:outline-none focus:shadow-outline dark:bg-dark-primary-green dark:border-secondary-green dark:text-secondary-green <%= validationErrors.find(error => error.param === 'email') ? 'border-red-300 dark:border-red-300' : '' %>">
                 <% if(validationErrors.find(error => error.param === 'email')) { %>
-                    <div class="flex flex-col justify-start items-start w-3/4 pt-2 px-3 text-xs rounded-lg">
+                    <div class="flex flex-col justify-start items-start w-3/4 pt-2 text-xs rounded-lg">
                         <% errorMessage.find(error => { if(error.param === 'email') {const email = error.msg %>
                         <p class="text-red-500"><%= email %></p>
                         <% }}) %>
                     </div>
                 <% } %>
                 <input type="password" name="new_password" id="new_password" placeholder="New Password"
-                       class="appearance-none border-b-2 w-3/4 py-2 px-3 mt-4 text-gray-700 leading-tight focus:outline-none focus:shadow-outline dark:bg-dark-primary-green dark:border-secondary-green dark:text-secondary-green <%= validationErrors.find(error => error.param === 'new_password') ? 'border-red-300 dark:border-red-300' : '' %>">
+                       class="appearance-none border-b-2 w-3/4 py-2 mt-4 text-gray-700 leading-tight focus:outline-none focus:shadow-outline dark:bg-dark-primary-green dark:border-secondary-green dark:text-secondary-green <%= validationErrors.find(error => error.param === 'new_password') ? 'border-red-300 dark:border-red-300' : '' %>">
                 <% if(validationErrors.find(error => error.param === 'new_password')) { %>
-                    <div class="flex flex-col justify-start items-start w-3/4 pt-2 px-3 text-xs rounded-lg">
+                    <div class="flex flex-col justify-start items-start w-3/4 pt-2 text-xs rounded-lg">
                         <% errorMessage.find(error => { if(error.param === 'new_password') {const passwordError = error.msg %>
                         <p class="text-red-500"><%= passwordError %></p>
                         <% }}) %>
                     </div>
                 <% } %>
                 <input type="password" name="old_password" id="old_password" placeholder="Old Password"
-                       class="appearance-none border-b-2 w-3/4 py-2 px-3 mt-4 text-gray-700 leading-tight focus:outline-none focus:shadow-outline dark:bg-dark-primary-green dark:border-secondary-green dark:text-secondary-green <%= validationErrors.find(error => error.param === 'old_password') ? 'border-red-300 dark:border-red-300' : '' %>">
+                       class="appearance-none border-b-2 w-3/4 py-2 mt-4 text-gray-700 leading-tight focus:outline-none focus:shadow-outline dark:bg-dark-primary-green dark:border-secondary-green dark:text-secondary-green <%= validationErrors.find(error => error.param === 'old_password') ? 'border-red-300 dark:border-red-300' : '' %>">
                 <% if(validationErrors.find(error => error.param === 'old_password')) { %>
-                    <div class="flex flex-col justify-start items-start w-3/4 pt-2 px-3 text-xs rounded-lg">
+                    <div class="flex flex-col justify-start items-start w-3/4 pt-2 text-xs rounded-lg">
                         <% errorMessage.find(error => { if(error.param === 'old_password') {const passwordError = error.msg %>
                         <p class="text-red-500"><%= passwordError %></p>
                         <% }}) %>
