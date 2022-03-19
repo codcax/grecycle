@@ -75,7 +75,7 @@ app.use((error, req, res, next) => {
         .render('errors/500', {
             pageTitle: 'Error!',
             path: '/500',
-            isAutheticated: req.session.isLoggedIn
+            isAuthenticated: req.session.isLoggedIn
         });
 });
 
