@@ -1,10 +1,10 @@
 //Node imports
 const bcrypt = require('bcryptjs');
-const crypto = require('crypto');
 const {validationResult} = require('express-validator/check')
 
 //Custom imports
 const User = require('../models/user');
+const emailTemplates = require('../utils/email');
 
 exports.getSignUp = (req, res, next) => {
     res.render('auth/signup', {
@@ -55,6 +55,9 @@ exports.postSignUp = (req, res, next) => {
         })
         .then(result => {
             res.redirect('/login');
+            emailTemplates.welcomeEmail(username, email).then(response => {
+                console.log(response);
+            });
         })
         .catch(err => {
             const error = new Error(err);
