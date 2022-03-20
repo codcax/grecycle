@@ -27,12 +27,7 @@ exports.welcomeEmail = async (username, email) => {
         }]
     };
 
-    await transporter.sendMail(sendOptions, (err, response) => {
-        if (err) {
-            console.log(err)
-        }
-        console.log(response)
-    });
+    await transporter.sendMail(sendOptions);
 };
 
 exports.resetPasswordEmail = async (username, email, resetToken) => {
@@ -44,12 +39,7 @@ exports.resetPasswordEmail = async (username, email, resetToken) => {
         html: template
     };
 
-    await transporter.sendMail(sendOptions, (err, response)=> {
-        if(err){
-            console.log(err)
-        }
-        console.log(response)
-    });
+    await transporter.sendMail(sendOptions);
 };
 
 
