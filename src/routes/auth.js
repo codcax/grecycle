@@ -55,5 +55,25 @@ router.post('/login',
     ],
     authController.postLogin);
 router.post('/logout', authController.postLogout);
+router.get('/reset-password', authController.getResetPassword);
+router.post('/reset-password', authController.postResetPassword);
+router.get('/new-password/:resetToken', authController.getNewPassword);
+router.post('/new-password',
+    [
+        body('password', 'Password is invalid.')
+            .isLength({min: 8})
+            .isAlphanumeric()
+            .withMessage('Password must be alphanumeric.')
+            .trim(),
+        body('confirm-password')
+            .trim()
+            .custom((value, {req}) => {
+                if (value !== req.body.password) {
+                    throw new Error('Passwords does not match.');
+                }
+                return true;
+            }),
+    ],
+    authController.postNewPassword);
 
 module.exports = router;

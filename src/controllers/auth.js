@@ -1,10 +1,11 @@
 //Node imports
 const bcrypt = require('bcryptjs');
-const {validationResult} = require('express-validator/check')
+const {validationResult} = require('express-validator/check');
+const crypto = require('crypto');
 
 //Custom imports
 const User = require('../models/user');
-const emailTemplates = require('../utils/email');
+const emailTemplates = require('../emails/auth');
 
 exports.getSignUp = (req, res, next) => {
     res.render('auth/signup', {
@@ -55,9 +56,7 @@ exports.postSignUp = (req, res, next) => {
         })
         .then(result => {
             res.redirect('/login');
-            emailTemplates.welcomeEmail(username, email).then(response => {
-                console.log(response);
-            });
+            return emailTemplates.welcomeEmail(username, email);
         })
         .catch(err => {
             const error = new Error(err);
@@ -124,6 +123,128 @@ exports.postLogin = (req, res, next) => {
                     console.log(err);
                     res.redirect('/login');
                 });
+        })
+        .catch(err => {
+            const error = new Error(err);
+            error.httpStatusCode = 500;
+            return next(error);
+        });
+};
+
+exports.getResetPassword = (req, res, next) => {
+    res.render('auth/resetpassword', {
+        pageTitle: 'Reset Password',
+        path: '/reset-password',
+        oldInput: {email: ''},
+        validationErrors: []
+    });
+};
+
+exports.postResetPassword = (req, res, next) => {
+    const email = req.body.email;
+    let username;
+    crypto.randomBytes(32, (err, buffer) => {
+        if (err) {
+            return res.redirect('/reset-password');
+        }
+
+        const resetToken = buffer.toString('hex');
+        User.findOne({email: email})
+            .then(user => {
+                if (!user) {
+                    let errors = [{param: 'email', msg: 'Email does not exist.'}];
+                    res.render('auth/resetpassword', {
+                        pageTitle: 'Reset Password',
+                        path: '/reset-password',
+                        oldInput: {email: ''},
+                        errorMessage: errors,
+                        validationErrors: errors
+                    });
+                }
+                username = user.username;
+                user.resetToken = resetToken;
+                user.resetTokenExpiration = Date.now() + 3600000;
+                return user.save();
+            })
+            .then(result => {
+                res.redirect('/');
+                return emailTemplates.resetPasswordEmail(username, email, resetToken);
+            })
+            .catch(err => {
+                const error = new Error(err);
+                error.httpStatusCode = 500;
+                return next(error);
+            });
+    });
+};
+
+exports.getNewPassword = (req, res, next) => {
+    const resetToken = req.params.resetToken;
+    console.log(resetToken)
+
+    User.findOne({resetToken: resetToken, resetTokenExpiration: {$gt: Date.now()}})
+        .then(user => {
+            if (!user) {
+                let errors = [{param: 'resetTokenExpired', msg: 'Link has expired.'}];
+                res.render('auth/newpassword', {
+                    pageTitle: 'Update Password',
+                    path: '/new-password',
+                    errorMessage: errors,
+                    validationErrors: errors
+                });
+            }
+            res.render('auth/newpassword', {
+                pageTitle: 'Update Password',
+                path: '/new-password',
+                userId: user._id.toString(),
+                oldInput: {password: ''},
+                resetToken: resetToken,
+                errorMessage: [],
+                validationErrors: []
+            });
+        })
+        .catch(err => {
+            const error = new Error(err);
+            error.httpStatusCode = 500;
+            return next(error);
+        })
+};
+
+exports.postNewPassword = (req, res, next) => {
+    const newPassword = req.body.password;
+    const userId = req.body.userId;
+    const resetToken = req.body.resetToken;
+    console.log(resetToken)
+    let resetUser;
+
+    const errors = validationResult(req);
+    if (!errors.isEmpty()) {
+        return res.status(422)
+            .render('auth/newpassword', {
+                pageTitle: 'Update Password',
+                path: '/new-password',
+                userId: userId,
+                oldInput: {password: newPassword},
+                resetToken: resetToken,
+                errorMessage: errors.array(),
+                validationErrors: errors.array()
+            });
+    }
+
+    User.findOne({resetToken: resetToken, resetTokenExpiration: {$gt: Date.now()}, _id: userId})
+        .then(user => {
+            resetUser = user;
+            return bcrypt.hash(newPassword, 12);
+        })
+        .then(hashedPassword => {
+            console.log(hashedPassword)
+            resetUser.password = hashedPassword;
+            resetUser.resetToken = undefined;
+            resetUser.resetTokenExpiration = undefined;
+            return resetUser.save();
+        })
+        .then(result => {
+            res.redirect('/login');
         })
         .catch(err => {
             const error = new Error(err);
