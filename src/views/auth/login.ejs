@@ -34,10 +34,12 @@
                     <% } %>
                     <div class="flex flex-col w-full justify-start items-start mt-4 sm:flex-row sm:justify-between sm:items-center">
                         <div class="flex text-xs md:text-sm text-left py-1.5">
-                            <input type="checkbox" name="rememberMe" id="rememberMe" value="rememberMe" class="mx-2 mt-0.5 md:mt-1 leading-tight"><span
+                            <input type="checkbox" name="rememberMe" id="rememberMe" value="rememberMe"
+                                   class="mx-2 mt-0.5 md:mt-1 leading-tight"><span
                                     class="text-primary-green dark:text-secondary-green">Remember me</span>
                         </div>
-                        <a class="text-xs mx-2 sm:mx-0 md:text-sm text-primary-green dark:text-secondary-green underline">Reset
+                        <a href="/reset-password"
+                           class="text-xs mx-2 sm:mx-0 md:text-sm text-primary-green dark:text-secondary-green underline">Reset
                             Password</a>
                     </div>
                     <input type="hidden" name="_csrf" value="<%= csrfToken %>">

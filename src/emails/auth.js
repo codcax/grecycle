@@ -27,7 +27,29 @@ exports.welcomeEmail = async (username, email) => {
         }]
     };
 
-    transporter.sendMail(sendOptions);
+    await transporter.sendMail(sendOptions, (err, response) => {
+        if (err) {
+            console.log(err)
+        }
+        console.log(response)
+    });
+};
+
+exports.resetPasswordEmail = async (username, email, resetToken) => {
+    const template = await ejs.renderFile(path.resolve(__dirname, '../views/emails/resetpassword.ejs'), { username: username,  email: email, resetToken: resetToken});
+    const sendOptions = {
+        from: process.env.DEFAULTEMAIL,
+        to: email,
+        subject: 'Password reset',
+        html: template
+    };
+
+    await transporter.sendMail(sendOptions, (err, response)=> {
+        if(err){
+            console.log(err)
+        }
+        console.log(response)
+    });
 };
 
 

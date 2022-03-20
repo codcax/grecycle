@@ -1,10 +1,11 @@
 //Node imports
 const bcrypt = require('bcryptjs');
-const {validationResult} = require('express-validator/check')
+const {validationResult} = require('express-validator/check');
+const crypto = require('crypto');
 
 //Custom imports
 const User = require('../models/user');
-const emailTemplates = require('../utils/email');
+const emailTemplates = require('../emails/auth');
 
 exports.getSignUp = (req, res, next) => {
     res.render('auth/signup', {
@@ -55,9 +56,7 @@ exports.postSignUp = (req, res, next) => {
         })
         .then(result => {
             res.redirect('/login');
-            emailTemplates.welcomeEmail(username, email).then(response => {
-                console.log(response);
-            });
+            return emailTemplates.welcomeEmail(username, email);
         })
         .catch(err => {
             const error = new Error(err);
@@ -130,6 +129,53 @@ exports.postLogin = (req, res, next) => {
             error.httpStatusCode = 500;
             return next(error);
         });
+};
+
+exports.getResetPassword = (req, res, next) => {
+    res.render('auth/resetpassword', {
+        pageTitle: 'Reset Password',
+        path: '/reset-password',
+        oldInput: {email: ''},
+        validationErrors: []
+    });
+};
+
+exports.postResetPassword = (req, res, next) => {
+    const email = req.body.email;
+    let username;
+    crypto.randomBytes(32, (err, buffer) => {
+        if (err) {
+            return res.redirect('/reset-password');
+        }
+
+        const resetToken = buffer.toString('hex');
+        User.findOne({email: email})
+            .then(user => {
+                if (!user) {
+                    let errors = [{param: 'email', msg: 'Email does not exist.'}];
+                    res.render('auth/resetpassword', {
+                        pageTitle: 'Reset Password',
+                        path: '/reset-password',
+                        oldInput: {email: ''},
+                        errorMessage: errors,
+                        validationErrors: errors
+                    });
+                }
+                username = user.username;
+                user.resetToken = resetToken;
+                user.resetTokenExpiration = Date.now() + 3600000;
+                return user.save();
+            })
+            .then(result => {
+                res.redirect('/');
+                return emailTemplates.resetPasswordEmail(username, email, resetToken);
+            })
+            .catch(err => {
+                const error = new Error(err);
+                error.httpStatusCode = 500;
+                return next(error);
+            });
+    });
 };
 
 exports.postLogout = (req, res, next) => {
