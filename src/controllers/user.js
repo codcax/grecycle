@@ -1,10 +1,8 @@
 //Node imports
-const crypto = require('crypto');
 const {validationResult} = require('express-validator/check')
 
 //Custom imports
 const User = require('../models/user');
-const bcrypt = require("bcryptjs");
 
 exports.getUserIndex = (req, res, next) => {
     res.render('user/index', {
