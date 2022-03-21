@@ -20,6 +20,10 @@ const userSchema = new Schema({
     optInNewsletter: {
         type: Boolean
     },
+    admin: {
+        type: Boolean,
+        required: true
+    },
     resetToken: String,
     resetTokenExpiration: Date
 });
