@@ -72,11 +72,8 @@ router.post('/admin-accounts', [
             }
             return true;
         }),
-    body('role')
-        .exists()
-        .withMessage('Role is required.')
+    body('role', 'Role is required.')
         .isIn(['editor', 'moderator'])
-        .withMessage('Role is invalid.')
 ], isAuth, isAdmin, adminController.postAddAdminAccount);
 // router.post('/admin-accounts/:adminId', isAuth, isAdmin, adminController.postEditAdminAccount);
 // router.delete('/admin-accounts/:adminId', isAuth, isAdmin, adminController.deleteAdminAccount);
