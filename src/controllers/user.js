@@ -6,7 +6,7 @@ const User = require('../models/user');
 
 exports.getUserIndex = (req, res, next) => {
     res.render('user/index', {
-        pageTitle: "Home",
+        pageTitle: 'Home',
         path: 'user/',
         oldInput: {},
         validationErrors: []
@@ -20,7 +20,7 @@ exports.getUserAccount = (req, res, next) => {
             const username = user.username;
             const email = user.email;
             res.render('user/account', {
-                pageTitle: "My Account",
+                pageTitle: 'My Account',
                 path: 'user/account',
                 userDetails: {username: username, email: email},
                 validationErrors: []

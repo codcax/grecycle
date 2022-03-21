@@ -51,6 +51,7 @@ exports.postSignUp = (req, res, next) => {
                 password: hashedPassword,
                 username: username,
                 optInNewsletter: optInNewsletter,
+                admin: false
             });
             return user.save();
         })

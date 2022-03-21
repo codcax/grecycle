@@ -9,9 +9,11 @@ const csrf = require('csurf');
 const sessionStore = require('./config/database')
 const shopRoutes = require('./routes/shop');
 const authRoutes = require('./routes/auth');
+const adminRoutes = require('./routes/admin');
 const userRoutes = require('./routes/user');
 const errorController = require('./controllers/error');
 const User = require('./models/user');
+const Admin = require('./models/admin');
 
 const app = express();
 const csrfProtection = csrf(undefined);
@@ -66,7 +68,8 @@ app.use((req, res, next) => {
 //Routes
 app.use(shopRoutes);
 app.use(authRoutes);
-app.use('/user',userRoutes);
+app.use('/admin', adminRoutes);
+app.use('/user', userRoutes);
 app.use('/500', errorController.get500);
 app.use(errorController.get404);
 app.use((error, req, res, next) => {
