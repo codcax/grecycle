@@ -7,9 +7,10 @@ const {check, body} = require('express-validator/check');
 const userController = require('../controllers/user');
 const User = require('../models/user');
 const isAuth = require('../middlewares/auth');
+const isUser = require('../middlewares/user');
 
-router.get('/', isAuth, userController.getUserIndex);
-router.get('/account', isAuth, userController.getUserAccount);
+router.get('/', isAuth, isUser, userController.getUserIndex);
+router.get('/account', isAuth, isUser, userController.getUserAccount);
 router.post('/account',
     [
         body('username', 'Username is invalid.')
@@ -21,11 +22,12 @@ router.post('/account',
             .withMessage('Email address is invalid.')
             .custom((value, {req}) => {
                 return User.findOne({email: value}).then(fetchedUser => {
-                    if ( fetchedUser && fetchedUser._id.toString() !== req.session.user._id.toString()) {
+                    if (fetchedUser && fetchedUser._id.toString() !== req.session.user._id.toString()) {
                         console.log(fetchedUser._id);
                         console.log(req.session.user._id);
                         return Promise.reject('Email address already taken.');
-                    };
+                    }
+                    ;
                 });
             })
             .normalizeEmail(),
@@ -37,8 +39,7 @@ router.post('/account',
         body('old_password')
             .trim()
     ],
-    isAuth,
-    userController.postUserAccount);
+    isAuth, isUser, userController.postUserAccount);
 // router.get('/cart', isAuth, userController.getUserCart);
 // router.post('/cart', isAuth, userController.postUserCart);
 // router.get('/order', isAuth, userController.getUserOrder);
