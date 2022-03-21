@@ -42,5 +42,11 @@ router.post('/account',
             .trim()
     ],
     isAuth, isAdmin, adminController.postAdminAccount);
+router.get('/admin-users', isAuth, isAdmin, adminController.getAdminUsers);
+router.post('/admin-users', isAuth, isAdmin, adminController.postAdminUsers);
+router.get('/admin-users/:adminId', isAuth, isAdmin, adminController.getAdminUser);
+router.post('/admin-users/:adminId', isAuth, isAdmin, adminController.postAdminUser);
+router.delete('/admin-users/:adminId', isAuth, isAdmin, adminController.deleteAdminUser);
+
 
 module.exports = router;

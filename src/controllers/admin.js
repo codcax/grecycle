@@ -99,3 +99,50 @@ exports.postAdminAccount = (req, res, next) => {
             return next(error);
         });
 };
+
+exports.getAdminUsers = (req, res, next) => {
+    res.render('admin/adminusers', {
+        pageTitle: 'Admins',
+        path: 'admin/admin-users',
+        oldInput: {},
+        validationErrors: []
+    });
+};
+
+exports.postAdminUsers = (req, res, next) => {
+    res.render('admin/adminusers', {
+        pageTitle: 'Admins',
+        path: 'admin/admin-users',
+        oldInput: {},
+        validationErrors: []
+    });
+};
+
+exports.getAdminUser = (req, res, next) => {
+    res.render('admin/adminuser', {
+        pageTitle: 'Admin',
+        path: 'admin/admin-users',
+        oldInput: {},
+        validationErrors: []
+    });
+};
+
+exports.postAdminUser = (req, res, next) => {
+    res.render('admin/adminuser', {
+        pageTitle: 'Admin',
+        path: 'admin/admin-users',
+        oldInput: {},
+        validationErrors: []
+    });
+};
+
+exports.deleteAdminUser = (req, res, next) => {
+    res.render('admin/adminusers', {
+        pageTitle: 'Admins',
+        path: 'admin/admin-users',
+        oldInput: {},
+        validationErrors: []
+    });
+};
+
+
