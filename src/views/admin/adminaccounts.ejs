@@ -8,7 +8,7 @@
             <div class="flex flex-col items-center m-4 p-4 rounded-lg shadow-md dark:shadow-none">
                 <h1 class="text-primary-green dark:text-secondary-green p-2 md:text-lg">Add Admin</h1>
                 <div class="flex justify-center items-center">
-                    <form action="/admin/admin-accounts" method="POST" class="flex-1 mt-4 text-sm md:text-base">
+                    <form action="/admin/admin-accounts" method="POST" class="flex-1 mt-4 text-xs md:text-sm">
                         <input type="email" name="email" id="email" placeholder="Email" value="<%= oldInput.email %>"
                                class="appearance-none border-b-2 w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline dark:bg-dark-primary-green dark:border-secondary-green dark:text-secondary-green
                                     <%= validationErrors.find(error => error.param === 'email') ? 'border-red-300 dark:border-red-300' : 'mb-4' %>">
@@ -87,15 +87,15 @@
             </div>
             <div class="flex flex-col items-center m-4 p-4 rounded-lg lg:col-span-2">
                 <h1 class="text-primary-green dark:text-secondary-green p-2 md:text-lg">Admin Accounts</h1>
-                <div class="flex flex-col w-full mt-4 text-sm md:text-base space-y-2">
+                <div class="flex flex-col w-full mt-4 text-xs md:text-sm space-y-2">
                     <% if(adminsList.length <= 0) { %>
-                        <div class="flex justify-center items-center px-2 py-4 text-sm shadow-md rounded-lg dark:shadow-none">
+                        <div class="flex justify-center items-center px-2 py-4 text-xs shadow-md rounded-lg dark:shadow-none">
                             <h1 class="text-gray-700 text-center dark:text-dark-secondary-green">No admin accounts.</h1>
                         </div>
                     <% } %>
                     <% adminsList.forEach((admin, index) => { %>
                         <form action="/admin/admin-accounts/edit/<%= admin._id %>" method="POST" id="<%= admin._id %>"
-                              class="px-2 mb-6 md:mb-0 text-sm shadow-md rounded-lg dark:shadow-none">
+                              class="px-2 mb-6 md:mb-0 text-xs shadow-md rounded-lg dark:shadow-none">
                             <div class="flex flex-col justify-around gap-2 p-2 md:flex-row">
                                 <h1 class="md:w-1/5 text-gray-700 border-b-2 py-1 mb-2 md:mb-0 border-grey text-center dark:border-secondary-green dark:text-dark-secondary-green"><%= admin.userId.username %></h1>
                                 <h1 class="md:w-2/5 text-gray-700 border-b-2 py-1 mb-2 md:mb-0 border-grey text-center dark:border-secondary-green dark:text-dark-secondary-green"><%= admin.userId.email %></h1>
@@ -112,7 +112,7 @@
                                     >Moderator
                                     </option>
                                 </select>
-                                <div class="flex flex-row justify-center items-center justify-center text-xs space-x-2 mb-2 md:mb-0">
+                                <div class="flex flex-row justify-center items-center justify-center text-xs space-x-6 mb-2 md:mb-0">
                                     <input type="hidden" name="adminId" value="<%= admin._id %>">
                                     <input type="hidden" name="_csrf" value="<%= csrfToken %>">
                                     <button type="submit" name="update" value="update" class="mx-2">
