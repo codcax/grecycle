@@ -207,7 +207,6 @@ exports.postEditAdminAccount = (req, res, next) => {
                         if (!user) {
                             return next(new Error('User account not found!'));
                         }
-                        console.log(user)
 
                         return User.deleteOne(user);
                     })
