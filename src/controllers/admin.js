@@ -10,12 +10,47 @@ const emailTemplates = require("../emails/auth");
 //Define constants
 
 exports.getAdminIndex = (req, res, next) => {
-    res.render('admin/index', {
-        pageTitle: 'Home',
-        path: 'admin/',
-        oldInput: {},
-        validationErrors: []
-    });
+    let adminsList = [];
+    let customersList = [];
+    let ordersList = [];
+
+    Admin.find().populate('userId')
+        .then(admins => {
+            adminsList = admins;
+        })
+        .then(result => {
+            return User.find({admin: false})
+                .then(customers => {
+                    customersList = customers;
+                    console.log(customersList)
+                })
+        })
+        .then(result => {
+            res.render('admin/index', {
+                pageTitle: 'Home',
+                path: 'admin/',
+                oldInput: {},
+                adminsList: adminsList,
+                customersList: customersList,
+                ordersList: ordersList,
+                validationErrors: []
+            });
+        })
+        .catch(err => {
+            const error = new Error(err);
+            error.httpStatusCode = 500;
+            return next(error);
+        })
+
+    // Orders.find().populate('userId')
+    //     .then(orders => {
+    //         ordersList = orders;
+    //     })
+    //     .catch(err => {
+    //         const error = new Error(err);
+    //         error.httpStatusCode = 500;
+    //         return next(error);
+    //     })
 };
 
 exports.getAdminAccount = (req, res, next) => {
@@ -154,9 +189,7 @@ exports.postAddAdminAccount = (req, res, next) => {
             return user.save().then(user => {
                 const date = new Date();
                 const admin = new Admin({
-                    userId: user._id,
-                    role: role,
-                    expiration: date.setMonth(date.getMonth() + 6)
+                    userId: user._id, role: role, expiration: date.setMonth(date.getMonth() + 6)
                 });
                 return admin.save();
             });
