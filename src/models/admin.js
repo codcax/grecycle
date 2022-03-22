@@ -7,9 +7,10 @@ const Schema = mongoose.Schema;
 const adminSchema = new Schema({
     userId: {
         type: Schema.Types.ObjectId,
-        required: true
+        required: true,
+        ref: 'User'
     },
-    permission: {
+    role: {
         type: String,
         required: true
     },

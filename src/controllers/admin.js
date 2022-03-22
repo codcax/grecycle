@@ -5,6 +5,7 @@ const {validationResult} = require('express-validator/check');
 const Admin = require('../models/admin');
 const User = require('../models/user');
 const bcrypt = require('bcryptjs')
+const emailTemplates = require("../emails/auth");
 
 //Define constants
 
@@ -100,49 +101,129 @@ exports.postAdminAccount = (req, res, next) => {
         });
 };
 
-exports.getAdminUsers = (req, res, next) => {
-    res.render('admin/adminusers', {
-        pageTitle: 'Admins',
-        path: 'admin/admin-users',
-        oldInput: {},
-        validationErrors: []
-    });
+exports.getAdminAccounts = (req, res, next) => {
+    let adminsList = [];
+    Admin.find().populate('userId')
+        .then(admins => {
+            adminsList = admins;
+            res.render('admin/adminaccounts', {
+                pageTitle: 'Admins',
+                path: 'admin/admin-accounts',
+                adminsList: adminsList,
+                oldInput: {},
+                validationErrors: []
+            });
+        })
+        .catch(err => {
+            const error = new Error(err);
+            error.httpStatusCode = 500;
+            return next(error);
+        })
 };
 
-exports.postAdminUsers = (req, res, next) => {
-    res.render('admin/adminusers', {
-        pageTitle: 'Admins',
-        path: 'admin/admin-users',
-        oldInput: {},
-        validationErrors: []
-    });
+exports.postAddAdminAccount = (req, res, next) => {
+    const username = req.body.username;
+    const email = req.body.email;
+    const password = req.body.password;
+    const role = req.body.role;
+
+    const errors = validationResult(req);
+    if (!errors.isEmpty()) {
+        return res.status(422)
+            .render('admin/adminaccounts', {
+                pageTitle: 'Admins',
+                path: 'admin/admin-accounts',
+                oldInput: {username: username, email: email, password: password},
+                adminsList: [],
+                errorMessage: errors.array(),
+                validationErrors: errors.array()
+            });
+    }
+
+    return bcrypt
+        .hash(password, 12)
+        .then(hashedPassword => {
+            const user = new User({
+                email: email,
+                password: hashedPassword,
+                username: username,
+                optInNewsletter: true,
+                privacy: true,
+                admin: true
+            });
+            return user.save().then(user => {
+                const date = new Date();
+                const admin = new Admin({
+                    userId: user._id,
+                    role: role,
+                    expiration: date.setMonth(date.getMonth() + 6)
+                });
+                return admin.save();
+            });
+        })
+        .then(result => {
+            res.redirect('/admin/admin-accounts');
+            return emailTemplates.welcomeEmail(username, email);
+        })
+        .catch(err => {
+            const error = new Error(err);
+            error.httpStatusCode = 500;
+            return next(error);
+        });
 };
 
-exports.getAdminUser = (req, res, next) => {
-    res.render('admin/adminuser', {
-        pageTitle: 'Admin',
-        path: 'admin/admin-users',
-        oldInput: {},
-        validationErrors: []
-    });
-};
 
-exports.postAdminUser = (req, res, next) => {
-    res.render('admin/adminuser', {
-        pageTitle: 'Admin',
-        path: 'admin/admin-users',
-        oldInput: {},
-        validationErrors: []
-    });
-};
+exports.postEditAdminAccount = (req, res, next) => {
+    const adminId = req.params.adminId;
+    const role = req.body.role;
+    const submit = req.body.update;
+    if (submit === 'update') {
+        Admin.findById(adminId)
+            .then(admin => {
+                if (!admin) {
+                    res.redirect('/admin/admin-accounts');
+                }
+                admin.role = role;
+                return admin.save()
+                    .then(result => {
+                        res.redirect('/admin/admin-accounts');
+                    });
+            })
+            .catch(err => {
+                console.log(err)
+                const error = new Error(err);
+                error.httpStatusCode = 500;
+                return next(error);
+            });
+    } else if (submit === 'delete') {
+        Admin.findById(adminId).populate('userId')
+            .then(admin => {
+                if (!admin) {
+                    return next(new Error('Admin account not found!'));
+                }
 
-exports.deleteAdminUser = (req, res, next) => {
-    res.render('admin/adminusers', {
-        pageTitle: 'Admins',
-        path: 'admin/admin-users',
-        oldInput: {},
-        validationErrors: []
-    });
+                User.findById(admin.userId._id)
+                    .then(user => {
+                        if (!user) {
+                            return next(new Error('User account not found!'));
+                        }
+
+                        return User.deleteOne(user);
+                    })
+
+                return Admin.deleteOne(admin);
+            })
+            .then(() => {
+                res.redirect('/admin/admin-accounts');
+            })
+            .catch(err => {
+                const error = new Error(err);
+                error.httpStatusCode = 500;
+                return next(error);
+            });
+    } else {
+        res.redirect('/admin/admin-accounts');
+    }
 };
 
 

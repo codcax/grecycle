@@ -42,11 +42,40 @@ router.post('/account',
             .trim()
     ],
     isAuth, isAdmin, adminController.postAdminAccount);
-router.get('/admin-users', isAuth, isAdmin, adminController.getAdminUsers);
-router.post('/admin-users', isAuth, isAdmin, adminController.postAdminUsers);
-router.get('/admin-users/:adminId', isAuth, isAdmin, adminController.getAdminUser);
-router.post('/admin-users/:adminId', isAuth, isAdmin, adminController.postAdminUser);
-router.delete('/admin-users/:adminId', isAuth, isAdmin, adminController.deleteAdminUser);
+router.get('/admin-accounts', isAuth, isAdmin, adminController.getAdminAccounts);
+router.post('/admin-accounts', [
+    body('username', 'Username is invalid.')
+        .isLength({min: 5})
+        .isString()
+        .trim(),
+    check('email')
+        .isEmail()
+        .withMessage('Email address is invalid.')
+        .custom((value, {req}) => {
+            return User.findOne({email: value}).then(fetchedUser => {
+                if (fetchedUser) {
+                    return Promise.reject('Email address already taken.');
+                }
+            });
+        })
+        .normalizeEmail(),
+    body('password', 'Password is invalid.')
+        .isLength({min: 8})
+        .isAlphanumeric()
+        .withMessage('Password must be alphanumeric.')
+        .trim(),
+    body('confirm-password')
+        .trim()
+        .custom((value, {req}) => {
+            if (value !== req.body.password) {
+                throw new Error('Passwords does not match.');
+            }
+            return true;
+        }),
+    body('role', 'Role is required.')
+        .isIn(['editor', 'moderator'])
+], isAuth, isAdmin, adminController.postAddAdminAccount);
+router.post('/admin-accounts/edit/:adminId', isAuth, isAdmin, adminController.postEditAdminAccount);
 
 
 module.exports = router;
