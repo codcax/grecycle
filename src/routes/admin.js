@@ -75,8 +75,7 @@ router.post('/admin-accounts', [
     body('role', 'Role is required.')
         .isIn(['editor', 'moderator'])
 ], isAuth, isAdmin, adminController.postAddAdminAccount);
-// router.post('/admin-accounts/:adminId', isAuth, isAdmin, adminController.postEditAdminAccount);
-// router.delete('/admin-accounts/:adminId', isAuth, isAdmin, adminController.deleteAdminAccount);
+router.post('/admin-accounts/edit/:adminId', isAuth, isAdmin, adminController.postEditAdminAccount);
 
 
 module.exports = router;

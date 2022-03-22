@@ -102,26 +102,30 @@ exports.postAdminAccount = (req, res, next) => {
 };
 
 exports.getAdminAccounts = (req, res, next) => {
-    Admin.find()
+    let adminsList = [];
+    Admin.find().populate('userId')
         .then(admins => {
-            if (admins.length > 0) {
-                console.log(admins)
-                return;
-            }
-            console.log("none")
+            adminsList = admins;
+            res.render('admin/adminaccounts', {
+                pageTitle: 'Admins',
+                path: 'admin/admin-accounts',
+                adminsList: adminsList,
+                oldInput: {},
+                validationErrors: []
+            });
         })
-    res.render('admin/adminaccounts', {
-        pageTitle: 'Admins',
-        path: 'admin/admin-accounts',
-        oldInput: {},
-        validationErrors: []
-    });
+        .catch(err => {
+            const error = new Error(err);
+            error.httpStatusCode = 500;
+            return next(error);
+        })
 };
 
 exports.postAddAdminAccount = (req, res, next) => {
     const username = req.body.username;
     const email = req.body.email;
     const password = req.body.password;
+    const role = req.body.role;
 
     const errors = validationResult(req);
     if (!errors.isEmpty()) {
@@ -130,6 +134,7 @@ exports.postAddAdminAccount = (req, res, next) => {
                 pageTitle: 'Admins',
                 path: 'admin/admin-accounts',
                 oldInput: {username: username, email: email, password: password},
+                adminsList: [],
                 errorMessage: errors.array(),
                 validationErrors: errors.array()
             });
@@ -146,7 +151,15 @@ exports.postAddAdminAccount = (req, res, next) => {
                 privacy: true,
                 admin: true
             });
-            return user.save();
+            return user.save().then(user => {
+                const date = new Date();
+                const admin = new Admin({
+                    userId: user._id,
+                    role: role,
+                    expiration: date.setMonth(date.getMonth() + 6)
+                });
+                return admin.save();
+            });
         })
         .then(result => {
             res.redirect('/admin/admin-accounts');
@@ -159,23 +172,59 @@ exports.postAddAdminAccount = (req, res, next) => {
         });
 };
 
-//
-// exports.postEditAdminAccount = (req, res, next) => {
-//     res.render('admin/adminaccounts', {
-//         pageTitle: 'Admin',
-//         path: 'admin/admin-accounts',
-//         oldInput: {},
-//         validationErrors: []
-//     });
-// };
-//
-// exports.deleteAdminAccount = (req, res, next) => {
-//     res.render('admin/accounts', {
-//         pageTitle: 'Admins',
-//         path: 'admin/admin-accounts',
-//         oldInput: {},
-//         validationErrors: []
-//     });
-// };
+
+exports.postEditAdminAccount = (req, res, next) => {
+    const adminId = req.params.adminId;
+    const role = req.body.role;
+    const submit = req.body.update;
+    if (submit === 'update') {
+        Admin.findById(adminId)
+            .then(admin => {
+                if (!admin) {
+                    res.redirect('/admin/admin-accounts');
+                }
+                admin.role = role;
+                return admin.save()
+                    .then(result => {
+                        res.redirect('/admin/admin-accounts');
+                    });
+            })
+            .catch(err => {
+                console.log(err)
+                const error = new Error(err);
+                error.httpStatusCode = 500;
+                return next(error);
+            });
+    } else if (submit === 'delete') {
+        Admin.findById(adminId).populate('userId')
+            .then(admin => {
+                if (!admin) {
+                    return next(new Error('Admin account not found!'));
+                }
+
+                User.findById(admin.userId._id)
+                    .then(user => {
+                        if (!user) {
+                            return next(new Error('User account not found!'));
+                        }
+                        console.log(user)
+
+                        return User.deleteOne(user);
+                    })
+
+                return Admin.deleteOne(admin);
+            })
+            .then(() => {
+                res.redirect('/admin/admin-accounts');
+            })
+            .catch(err => {
+                const error = new Error(err);
+                error.httpStatusCode = 500;
+                return next(error);
+            });
+    } else {
+        res.redirect('/admin/admin-accounts');
+    }
+};
 
 
