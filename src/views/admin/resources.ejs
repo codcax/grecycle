@@ -8,7 +8,7 @@
             <div class="flex flex-col items-center m-4 p-4 rounded-lg shadow-md dark:shadow-none">
                 <h1 class="text-primary-green dark:text-secondary-green p-2 md:text-lg">Add Resource</h1>
                 <div class="flex justify-center items-center">
-                    <form action="/admin/resources" method="POST" enctype="multipart/form-data" class="flex-1 mt-4 text-xs md:text-sm">
+                    <form action="/admin/resources" method="POST" enctype="multipart/form-data" class="flex-1 mt-4 text-xs md:text-sm" novalidate>
                         <input type="text" name="name" id="name" placeholder="Name" value="<%= oldInput.name %>"
                                class="appearance-none border-b-2 w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline dark:bg-dark-primary-green dark:border-secondary-green dark:text-secondary-green
                                     <%= validationErrors.find(error => error.param === 'name') ? 'border-red-300 dark:border-red-300' : '' %>"/>
