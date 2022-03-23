@@ -76,6 +76,19 @@ router.post('/admin-accounts', [
         .isIn(['editor', 'moderator'])
 ], isAuth, isAdmin, adminController.postAddAdminAccount);
 router.post('/admin-accounts/edit/:adminId', isAuth, isAdmin, adminController.postEditAdminAccount);
+router.get('/resources', isAuth, isAdmin, adminController.getResources);
+router.post('/resources',
+    [
+        body('name', 'Name is invalid.')
+            .isLength({min: 5})
+            .isString()
+            .trim(),
+        body('price', 'Price is invalid.')
+            .isFloat({ gt: 0.0 }),
+        body('status', 'Status is required.')
+            .isIn(['active', 'inactive'])
+    ],
+    isAuth, isAdmin, adminController.postAddResources);
 
 
 module.exports = router;

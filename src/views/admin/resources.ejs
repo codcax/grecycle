@@ -1,0 +1,87 @@
+<%- include('../includes/head.ejs') %>
+</head>
+<%- include('../includes/admin/navigation.ejs') %>
+
+<div class="flex flex-grow">
+    <div class="flex flex-grow font-montserrat">
+        <div class="grid grid-flow-rows-2 w-full mt-12 px-2 py-12 mx-auto lg:mt-0 lg:grid-rows-none lg:grid-cols-3 xl:px-24">
+            <div class="flex flex-col items-center m-4 p-4 rounded-lg shadow-md dark:shadow-none">
+                <h1 class="text-primary-green dark:text-secondary-green p-2 md:text-lg">Add Resource</h1>
+                <div class="flex justify-center items-center">
+                    <form action="/admin/resources" method="POST" enctype="multipart/form-data" class="flex-1 mt-4 text-xs md:text-sm">
+                        <input type="text" name="name" id="name" placeholder="Name" value="<%= oldInput.name %>"
+                               class="appearance-none border-b-2 w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline dark:bg-dark-primary-green dark:border-secondary-green dark:text-secondary-green
+                                    <%= validationErrors.find(error => error.param === 'name') ? 'border-red-300 dark:border-red-300' : '' %>"/>
+                        <% if(validationErrors.find(error => error.param === 'name')) { %>
+                            <div class="flex flex-col justify-start items-start text-left text-xs mt-2 mb-4 px-2 rounded-lg">
+                                <% errorMessage.find(error => { if(error.param === 'name') {const nameError = error.msg %>
+                                <p class="text-red-500"><%= nameError %></p>
+                                <% }}) %>
+                            </div>
+                        <% } %>
+                        <div class="flex flex-col justify-start items-start text-left text-xs p-2 mb-1">
+                            <p class="italic text-gray-500 dark:text-tertiary-green">Use at least 5 characters
+                                minimum.</p>
+                        </div>
+                        <input type="number" name="price" id="price" placeholder="Price (RM/kg)" min="1" step="any"
+                               value="<%= oldInput.price %>"
+                               class="appearance-none border-b-2 w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline dark:bg-dark-primary-green dark:border-secondary-green dark:text-secondary-green
+                                    <%= validationErrors.find(error => error.param === 'price') ? 'border-red-300 dark:border-red-300' : '' %>">
+                        <% if(validationErrors.find(error => error.param === 'price')) { %>
+                            <div class="flex flex-col justify-start items-start text-left text-xs mt-2 px-2 rounded-lg">
+                                <% errorMessage.find(error => { if(error.param === 'price') {const priceError = error.msg %>
+                                <p class="text-red-500"><%= priceError %></p>
+                                <% }}) %>
+                            </div>
+                        <% } %>
+                        <div class="flex flex-col justify-start items-start text-left text-xs p-2 mb-1">
+                            <p class="italic text-gray-500 dark:text-tertiary-green">SI unit used as measurement of
+                                mass is <span class="font-semibold italic">kilogram</span>.</p>
+                        </div>
+                        <select name="status" id="status"
+                                value="<%= oldInput.status %>"
+                                class="border-b-2 w-full mt-2 p-2 inset-x-6 text-gray-700 leading-tight focus:outline-none focus:shadow-outline dark:bg-dark-primary-green dark:border-secondary-green dark:text-secondary-green
+                                    <%= validationErrors.find(error => error.param === 'status') ? 'border-red-300 dark:border-red-300' : 'mb-4' %>">
+                            <option disabled selected value> Select a status</option>
+                            <option value="active">Active</option>
+                            <option value="inactive">Inactive</option>
+                        </select>
+                        <% if(validationErrors.find(error => error.param === 'status')) { %>
+                            <div class="flex flex-col justify-start items-start text-left text-xs mt-2 mb-4 px-2 rounded-lg">
+                                <% errorMessage.find(error => { if(error.param === 'status') {const statusError = error.msg %>
+                                <p class="text-red-500"><%= statusError %></p>
+                                <% }}) %>
+                            </div>
+                        <% } %>
+                        <div class="flex justify-center items-center rounded-md w-full py-2 px-3 bg-tertiary-green text-primary-green
+                                <%= validationErrors.find(error => error.param === 'status') ? 'border-red-300 dark:border-red-300' : '' %>">
+                            <label for="image" class="">
+                                <input type="file" name="image" id="image" class="hidden"/> Select an image
+                            </label>
+                        </div>
+                        <% if(validationErrors.find(error => error.param === 'image')) { %>
+                            <div class="flex flex-col justify-start items-start text-left text-xs mt-2 px-2 rounded-lg">
+                                <% errorMessage.find(error => { if(error.param === 'image') {const imageError = error.msg %>
+                                <p class="text-red-500"><%= imageError %></p>
+                                <% }}) %>
+                            </div>
+                        <% } %>
+                        <div class="flex flex-col justify-start items-start text-left text-xs p-2 mb-1">
+                            <p class="italic text-gray-500 dark:text-tertiary-green">Accepted file types are png, jpg
+                                and svg.</p>
+                        </div>
+                        <input type="hidden" name="_csrf" value="<%= csrfToken %>">
+                        <div class="flex flex-col justify-center items-center">
+                            <button type="submit"
+                                    class="px-8 py-2 mt-8 rounded-lg bg-primary-green text-white dark:bg-secondary-green dark:text-dark-primary-green">
+                                Add Resource
+                            </button>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<%- include('../includes/admin/footer.ejs') %>

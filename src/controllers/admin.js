@@ -4,6 +4,7 @@ const {validationResult} = require('express-validator/check');
 //Custom imports
 const Admin = require('../models/admin');
 const User = require('../models/user');
+const Resource = require('../models/resource');
 const bcrypt = require('bcryptjs')
 const emailTemplates = require("../emails/auth");
 
@@ -258,5 +259,59 @@ exports.postEditAdminAccount = (req, res, next) => {
         res.redirect('/admin/admin-accounts');
     }
 };
+
+exports.getResources = (req, res, next) => {
+    Resource.find()
+        .then(resources => {
+            res.render('admin/resources', {
+                pageTitle: 'Resources',
+                path: 'admin/resources',
+                resourcesList: resources,
+                oldInput: {},
+                validationErrors: []
+            });
+        })
+        .catch(err => {
+            const error = new Error(err);
+            error.httpStatusCode = 500;
+            return next(error);
+        })
+};
+
+exports.postAddResources = (req, res, next) => {
+    const name = req.body.name;
+    const price = req.body.price;
+    const status = req.body.status;
+    const image = req.file;
+
+    if (!image) {
+        let errors = [{param: 'image', msg: 'Please upload an image.'}];
+        return res.status(422)
+            .render('admin/resources', {
+                pageTitle: 'Resources',
+                path: 'admin/resources',
+                oldInput: {name: name, price: price, status: status},
+                adminsList: [],
+                errorMessage: errors,
+                validationErrors: errors
+            });
+    }
+
+    const errors = validationResult(req);
+    if (!errors.isEmpty()) {
+        return res.status(422)
+            .render('admin/resources', {
+                pageTitle: 'Resources',
+                path: 'admin/resources',
+                oldInput: {name: name, price: price, status: status},
+                adminsList: [],
+                errorMessage: errors.array(),
+                validationErrors: errors.array()
+            });
+    }
+
+    console.log(name, price, status, image);
+}
+;
 
 
