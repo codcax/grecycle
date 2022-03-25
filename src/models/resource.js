@@ -16,11 +16,15 @@ const resourceSchema = new Schema({
         required: true
     },
     unit: {
-      type: String,
-      required: true
+        type: String,
+        required: true
     },
-    active: {
-        type: Boolean,
+    status: {
+        type: String,
+        required: true
+    },
+    imagePath: {
+        type: String,
         required: true
     }
 });

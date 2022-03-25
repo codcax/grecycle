@@ -283,19 +283,7 @@ exports.postAddResources = (req, res, next) => {
     const price = req.body.price;
     const status = req.body.status;
     const image = req.file;
-
-    if (!image) {
-        let errors = [{param: 'image', msg: 'Please upload an image.'}];
-        return res.status(422)
-            .render('admin/resources', {
-                pageTitle: 'Resources',
-                path: 'admin/resources',
-                oldInput: {name: name, price: price, status: status},
-                adminsList: [],
-                errorMessage: errors,
-                validationErrors: errors
-            });
-    }
+    const csrf = req.body._csrf;
 
     const errors = validationResult(req);
     if (!errors.isEmpty()) {
@@ -310,7 +298,40 @@ exports.postAddResources = (req, res, next) => {
             });
     }
 
-    console.log(name, price, status, image);
+    if (!image) {
+        let errors = [{param: 'image', msg: 'Please upload an image.'}];
+        return res.status(422)
+            .render('admin/resources', {
+                pageTitle: 'Resources',
+                path: 'admin/resources',
+                oldInput: {name: name, price: price, status: status},
+                adminsList: [],
+                errorMessage: errors,
+                validationErrors: errors
+            });
+    }
+
+    const imagePath = image.path;
+
+    const resource = new Resource({
+        name: name,
+        price: price,
+        status: status,
+        imagePath: imagePath,
+        unit: 'kg'
+    });
+
+    resource.save()
+        .then(result => {
+            res.redirect('/admin/resources');
+        })
+        .catch(err => {
+            const error = new Error(err);
+            error.httpStatusCode = 500;
+            return next(error);
+        });
+
+    // console.log(name, price, status, image);
 }
 ;
 

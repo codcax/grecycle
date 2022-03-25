@@ -4,6 +4,7 @@ const session = require('express-session');
 const bodyParser = require('body-parser');
 const mongoose = require('mongoose');
 const csrf = require('csurf');
+const multer = require('multer');
 
 //Custom imports
 const sessionStore = require('./config/database')
@@ -14,6 +15,7 @@ const userRoutes = require('./routes/user');
 const errorController = require('./controllers/error');
 const User = require('./models/user');
 const Admin = require('./models/admin');
+const fileUpload = require('./middlewares/upload');
 
 const app = express();
 const csrfProtection = csrf(undefined);
@@ -31,6 +33,7 @@ app.set("views", "./src/views");
 
 //Middlewares
 app.use(bodyParser.urlencoded({extended: false}));
+app.use(fileUpload.uploadFile.single('resourceimage'));
 app.use(express.static(__dirname + '/public'));
 app.use(session({
     secret: 'my secret',
@@ -48,7 +51,8 @@ app.use((req, res, next) => {
 app.use((req, res, next) => {
     if (!req.session.user) {
         return next();
-    };
+    }
+    ;
 
     User.findById(req.session.user_id)
         .then(user => {
