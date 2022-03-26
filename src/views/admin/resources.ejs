@@ -1,0 +1,78 @@
+<%- include('../includes/head.ejs') %>
+</head>
+<%- include('../includes/admin/navigation.ejs') %>
+
+<div class="flex flex-grow">
+    <div class="flex flex-grow font-montserrat">
+        <div class="grid w-full px-2 py-12 mx-auto xl:px-24">
+            <div class="flex flex-col items-center m-4 p-4 rounded-lg lg:col-span-2">
+                <a href="/admin/resources/add" class="bg-primary-green rounded-lg text-tertiary-green px-6 py-2 mb-4 md:text-lg">Add Resources</a>
+                <% if(resourcesList.length <= 0) { %>
+                    <div class="flex justify-center items-center px-2 py-4 text-xs shadow-md rounded-lg dark:shadow-none">
+                        <h1 class="text-gray-700 text-center dark:text-dark-secondary-green">No resources.</h1>
+                    </div>
+                <% } %>
+                <div class="flex flex-wrap justify-center items-center gap-4">
+                    <% resourcesList.forEach((resource, index) => { %>
+                        <form action="/admin/resources/edit/<%= resource._id %>" method="POST"
+                              class="grid grid-row-4 gap-y-2 mt-4 text-xs items-center p-4 rounded-lg shadow-md md:text-sm dark:shadow-none dark:bg-tertiary-green"
+                              enctype="multipart/form-data" novalidate>
+                            <div class="flex justify-center items-center mb-4">
+                                <img src="/<%= resource.imagePath %>" alt="" class="h-20 w-auto">
+                            </div>
+                            <div class="flex flex-row flex-wrap">
+                                <label for="name" class="hidden py-2 px-3 w-1/4 sm:flex">Name</label>
+                                <input type="text" name="name" class="flex flex-1 appearance-none border-2 rounded-lg p-2 text-gray-700 leading-tight focus:outline-none focus:shadow-outline dark:bg-tertiary-green
+                                  <%= (validationErrors.find(error => error.param === 'name') && validationErrors.find(error => error.param == resource._id)) ? 'border-red-300 dark:border-red-300' : 'dark:border-dark-secondary-green' %>"
+                                       value="<%= resource.name %>">
+                            </div>
+                            <div class="flex flex-row flex-wrap">
+                                <label for="price" class="hidden py-2 px-3 w-1/4 sm:flex">Price</label>
+                                <input type="number" name="price" class="flex flex-1 appearance-none border-2 rounded-lg p-2 text-gray-700 leading-tight focus:outline-none focus:shadow-outline dark:bg-tertiary-green
+                                    <%= (validationErrors.find(error => error.param === 'price') && validationErrors.find(error => error.param == resource._id)) ? 'border-red-300 dark:border-red-300' : 'dark:border-dark-secondary-green' %>"
+                                       value="<%= resource.price %>">
+                            </div>
+                            <div class="flex flex-row flex-wrap">
+                                <label for="status" class="hidden py-2 px-3 w-1/4 sm:flex">Status</label>
+                                <select name="status"
+                                        value="<%= resource.status %>"
+                                        class="flex flex-1 border-2 rounded-lg mb-2 p-2 text-gray-700 leading-tight focus:outline-none focus:shadow-outline dark:bg-tertiary-green
+                                    <%= (validationErrors.find(error => error.param === 'status') && validationErrors.find(error => error.param == resource._id)) ? 'border-red-300 dark:border-red-300' : 'dark:border-dark-secondary-green' %>">
+                                    <option disabled selected value> Select a status</option>
+                                    <option value="active"
+                                    <% if (resource.status === 'active') { %> selected
+                                            <% } %>
+                                    >Active
+                                    </option>
+                                    <option value="inactive"
+                                    <% if (resource.status === 'inactive') { %> selected
+                                            <% } %>
+                                    >Inactive
+                                    </option>
+                                </select>
+                            </div>
+                            <div class="flex justify-center items-center rounded-md w-full py-2 px-3 bg-tertiary-green text-primary-green dark:bg-dark-secondary-green">
+                                <label for="image" class="">
+                                    <input type="file" name="resourceimage" id="image" class="hidden"/>
+                                    Upload image
+                                </label>
+                            </div>
+                            <div class="flex flex-row justify-center items-center justify-center text-xs space-x-6 mb-2 mt-4 md:mb-0">
+                                <input type="hidden" name="resourceId" value="<%= resource._id %>">
+                                <input type="hidden" name="_csrf" value="<%= csrfToken %>">
+                                <button type="submit" name="update" value="update" class="mx-2">
+                                    <img src="/images/save-icon.png" alt="" class="h-6">
+                                </button>
+                                <button type="submit" name="update" value="delete" class="mx-2">
+                                    <img src="/images/delete-icon.png" alt="" class="h-6">
+                                </button>
+                            </div>
+                        </form>
+                    <% }) %>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<%- include('../includes/admin/footer.ejs') %>

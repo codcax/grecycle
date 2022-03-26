@@ -4,8 +4,10 @@ const {validationResult} = require('express-validator/check');
 //Custom imports
 const Admin = require('../models/admin');
 const User = require('../models/user');
+const Resource = require('../models/resource');
 const bcrypt = require('bcryptjs')
-const emailTemplates = require("../emails/auth");
+const emailTemplates = require('../emails/auth');
+const fileHelper = require('../utils/file');
 
 //Define constants
 
@@ -22,7 +24,6 @@ exports.getAdminIndex = (req, res, next) => {
             return User.find({admin: false})
                 .then(customers => {
                     customersList = customers;
-                    console.log(customersList)
                 })
         })
         .then(result => {
@@ -108,7 +109,7 @@ exports.postAdminAccount = (req, res, next) => {
                                 user.email = newEmail;
                                 return user.save()
                                     .then(result => {
-                                        res.redirect("/admin/account");
+                                        res.redirect('/admin/account');
                                     });
                             });
                     }
@@ -156,6 +157,15 @@ exports.getAdminAccounts = (req, res, next) => {
         })
 };
 
+exports.getAddAdminAccount = (req, res, next) => {
+    res.render('admin/addadminaccount', {
+        pageTitle: 'Add Admins',
+        path: 'admin/admin-accounts/add',
+        oldInput: {},
+        validationErrors: []
+    });
+};
+
 exports.postAddAdminAccount = (req, res, next) => {
     const username = req.body.username;
     const email = req.body.email;
@@ -165,9 +175,9 @@ exports.postAddAdminAccount = (req, res, next) => {
     const errors = validationResult(req);
     if (!errors.isEmpty()) {
         return res.status(422)
-            .render('admin/adminaccounts', {
-                pageTitle: 'Admins',
-                path: 'admin/admin-accounts',
+            .render('admin/addadminaccount', {
+                pageTitle: 'Add Admins',
+                path: 'admin/admin-accounts/add',
                 oldInput: {username: username, email: email, password: password},
                 adminsList: [],
                 errorMessage: errors.array(),
@@ -204,7 +214,6 @@ exports.postAddAdminAccount = (req, res, next) => {
             return next(error);
         });
 };
-
 
 exports.postEditAdminAccount = (req, res, next) => {
     const adminId = req.params.adminId;
@@ -259,4 +268,149 @@ exports.postEditAdminAccount = (req, res, next) => {
     }
 };
 
+exports.getResources = (req, res, next) => {
+    Resource.find()
+        .then(resources => {
+            res.render('admin/resources', {
+                pageTitle: 'Resources',
+                path: 'admin/resources',
+                resourcesList: resources,
+                oldInput: {},
+                validationErrors: []
+            });
+        })
+        .catch(err => {
+            const error = new Error(err);
+            error.httpStatusCode = 500;
+            return next(error);
+        })
+};
+
+exports.getAddResource = (req, res, next) => {
+    res.render('admin/addresource', {
+        pageTitle: 'Add Resources',
+        path: 'admin/resources/add',
+        oldInput: {},
+        validationErrors: []
+    });
+};
+
+exports.postAddResource = (req, res, next) => {
+    const name = req.body.name;
+    const price = req.body.price;
+    const status = req.body.status;
+    const image = req.file;
+
+    const errors = validationResult(req);
+    if (!errors.isEmpty()) {
+        return res.status(422)
+            .render('admin/addresource', {
+                pageTitle: 'Add Resources',
+                path: 'admin/resources/add',
+                oldInput: {name: name, price: price, status: status, image: image},
+                resourcesList: [],
+                errorMessage: errors.array(),
+                validationErrors: errors.array()
+            });
+    }
+
+    if (!image) {
+        let errors = [{param: 'image', msg: 'Please upload an image.'}];
+        return res.status(422)
+            .render('admin/addresource', {
+                pageTitle: 'Add Resources',
+                path: 'admin/resources/add',
+                oldInput: {name: name, price: price, status: status},
+                resorucesList: [],
+                errorMessage: errors,
+                validationErrors: errors
+            });
+    }
+
+    const imagePath = image.path;
+
+    const resource = new Resource({
+        name: name,
+        price: price,
+        status: status,
+        imagePath: imagePath,
+        unit: 'kg'
+    });
+
+    resource.save()
+        .then(result => {
+            res.redirect('/admin/resources');
+        })
+        .catch(err => {
+            const error = new Error(err);
+            error.httpStatusCode = 500;
+            return next(error);
+        });
+};
+
+exports.postEditResources = (req, res, next) => {
+    const resourceId = req.params.resourceId;
+    const name = req.body.name;
+    const price = req.body.price;
+    const status = req.body.status;
+    const image = req.file;
+    const submit = req.body.update;
+
+    const errors = validationResult(req);
+    if (!errors.isEmpty()) {
+        errors.errors.push({param: resourceId});
+        Resource.find()
+            .then(resources => {
+                return res.status(422)
+                    .render('admin/resources', {
+                        pageTitle: 'Resources',
+                        path: 'admin/resources',
+                        oldInput: {name: name, price: price, status: status, image: image},
+                        resourcesList: resources,
+                        errorMessage: errors.array(),
+                        validationErrors: errors.array()
+                    });
+            })
+    }
+
+    if (submit === 'update') {
+        Resource.findById(resourceId)
+            .then(resource => {
+                resource.name = name;
+                resource.price = price;
+                resource.status = status;
+                if(image){
+                    fileHelper.deleteFile(resource.imagePath);
+                    resource.imagePath = image.path;
+                }
+                return resource.save()
+                    .then(result => {
+                        res.redirect('/admin/resources');
+                    });
+            }).catch(err => {
+            const error = new Error(err);
+            error.httpStatusCode = 500;
+            return next(error);
+        })
+    } else if (submit === 'delete') {
+        Resource.findById(resourceId)
+            .then(resource => {
+                if (!resource) {
+                    return next(new Error('Resource not found!'));
+                }
+                fileHelper.deleteFile(resource.imagePath);
+                return Resource.deleteOne(resource);
+            })
+            .then(() => {
+                res.redirect('/admin/resources');
+            })
+            .catch(err => {
+                const error = new Error(err);
+                error.httpStatusCode = 500;
+                return next(error);
+            });
+    } else {
+        res.redirect('/admin/resources');
+    }
+};
 
