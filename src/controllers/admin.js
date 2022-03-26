@@ -359,7 +359,7 @@ exports.postEditResources = (req, res, next) => {
     const errors = validationResult(req);
     if (!errors.isEmpty()) {
         errors.errors.push({param: resourceId});
-        Resource.find()
+        return Resource.find()
             .then(resources => {
                 return res.status(422)
                     .render('admin/resources', {
