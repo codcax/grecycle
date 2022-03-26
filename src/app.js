@@ -5,6 +5,7 @@ const bodyParser = require('body-parser');
 const mongoose = require('mongoose');
 const csrf = require('csurf');
 const multer = require('multer');
+const path = require('path');
 
 //Custom imports
 const sessionStore = require('./config/database')
@@ -34,7 +35,8 @@ app.set("views", "./src/views");
 //Middlewares
 app.use(bodyParser.urlencoded({extended: false}));
 app.use(fileUpload.uploadFile.single('resourceimage'));
-app.use(express.static(__dirname + '/public'));
+app.use(express.static(path.join(__dirname + '/public')));
+app.use('/src/images',express.static(path.join(__dirname + '/images')));
 app.use(session({
     secret: 'my secret',
     resave: false,

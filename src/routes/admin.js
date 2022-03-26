@@ -43,7 +43,8 @@ router.post('/account',
     ],
     isAuth, isAdmin, adminController.postAdminAccount);
 router.get('/admin-accounts', isAuth, isAdmin, adminController.getAdminAccounts);
-router.post('/admin-accounts', [
+router.get('/admin-accounts/add', isAuth, isAdmin, adminController.getAddAdminAccount);
+router.post('/admin-accounts/add', [
     body('username', 'Username is invalid.')
         .isLength({min: 5})
         .isString()
@@ -77,7 +78,18 @@ router.post('/admin-accounts', [
 ], isAuth, isAdmin, adminController.postAddAdminAccount);
 router.post('/admin-accounts/edit/:adminId', isAuth, isAdmin, adminController.postEditAdminAccount);
 router.get('/resources', isAuth, isAdmin, adminController.getResources);
-router.post('/resources',
+router.get('/resources/add', isAuth, isAdmin, adminController.getAddResource);
+router.post('/resources/add', [
+        body('name', 'Name is invalid.')
+            .isLength({min: 5})
+            .isString()
+            .trim(),
+        body('price', 'Price is invalid.')
+            .isFloat({ gt: 0.0 }),
+        body('status', 'Status is required.')
+            .isIn(['active', 'inactive'])
+    ], isAuth, isAdmin, adminController.postAddResource);
+router.post('/resources/edit/:resourceId',
     [
         body('name', 'Name is invalid.')
             .isLength({min: 5})
@@ -88,7 +100,7 @@ router.post('/resources',
         body('status', 'Status is required.')
             .isIn(['active', 'inactive'])
     ],
-    isAuth, isAdmin, adminController.postAddResources);
+    isAuth, isAdmin, adminController.postEditResources);
 
 
 module.exports = router;

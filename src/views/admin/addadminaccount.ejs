@@ -1,0 +1,92 @@
+<%- include('../includes/head.ejs') %>
+</head>
+<%- include('../includes/admin/navigation.ejs') %>
+
+<div class="flex flex-grow">
+    <div class="flex flex-grow font-montserrat">
+        <div class="grid w-full px-2 py-12 mx-auto xl:px-24">
+            <div class="flex flex-col items-center m-4 p-4 rounded-lg shadow-md dark:shadow-none">
+                <h1 class="text-primary-green dark:text-secondary-green p-2 md:text-lg">New Admin</h1>
+                <div class="flex justify-center items-center">
+                    <form action="/admin/admin-accounts/add" method="POST" class="flex-1 mt-4 text-xs md:text-sm" novalidate>
+                        <input type="email" name="email" id="email" placeholder="Email" value="<%= oldInput.email %>"
+                               class="appearance-none border-b-2 w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline dark:bg-dark-primary-green dark:border-secondary-green dark:text-secondary-green
+                                    <%= validationErrors.find(error => error.param === 'email') ? 'border-red-300 dark:border-red-300' : 'mb-4' %>">
+                        <% if(validationErrors.find(error => error.param === 'email')) { %>
+                            <div class="flex flex-col justify-start items-start text-left text-xs mt-2 mb-4 px-2 rounded-lg">
+                                <% errorMessage.find(error => { if(error.param === 'email') {const emailError = error.msg %>
+                                <p class="text-red-500"><%= emailError %></p>
+                                <% }}) %>
+                            </div>
+                        <% } %>
+                        <input type="text" name="username" id="username" placeholder="Username"
+                               value="<%= oldInput.username %>"
+                               class="appearance-none border-b-2 w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline dark:bg-dark-primary-green dark:border-secondary-green dark:text-secondary-green
+                                    <%= validationErrors.find(error => error.param === 'username') ? 'border-red-300 dark:border-red-300' : '' %>">
+                        <% if(validationErrors.find(error => error.param === 'username')) { %>
+                            <div class="flex flex-col justify-start items-start text-left text-xs mt-2 px-2 rounded-lg">
+                                <% errorMessage.find(error => { if(error.param === 'username') {const usernameError = error.msg %>
+                                <p class="text-red-500"><%= usernameError %></p>
+                                <% }}) %>
+                            </div>
+                        <% } %>
+                        <div class="flex flex-col justify-start items-start text-left text-xs p-2 mb-1">
+                            <p class="italic text-gray-500 dark:text-tertiary-green">Use at least 5 characters
+                                minimum.</p>
+                        </div>
+                        <input type="password" name="password" id="password" placeholder="Password"
+                               value="<%= oldInput.password %>"
+                               class="appearance-none border-b-2 w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline dark:bg-dark-primary-green dark:border-secondary-green dark:text-secondary-green
+                                    <%= validationErrors.find(error => error.param === 'password') ? 'border-red-300 dark:border-red-300' : '' %>">
+                        <% if(validationErrors.find(error => error.param === 'password')) { %>
+                            <div class="flex flex-col justify-start items-start text-left text-xs mt-2 px-2 rounded-lg">
+                                <% errorMessage.find(error => { if(error.param === 'password') {const passwordError = error.msg %>
+                                <p class="text-red-500"><%= passwordError %></p>
+                                <% }}) %>
+                            </div>
+                        <% } %>
+                        <div class="flex flex-col justify-start items-start text-left text-xs p-2 mb-1">
+                            <p class="italic text-gray-500 dark:text-tertiary-green">Use alphanumeric characters with at
+                                least 8 characters minimum.</p>
+                        </div>
+                        <input type="password" name="confirm-password" id="confirm-password"
+                               placeholder="Confirm Password"
+                               class="appearance-none border-b-2 w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline dark:bg-dark-primary-green dark:border-secondary-green dark:text-secondary-green
+                                    <%= validationErrors.find(error => error.param === 'confirm-password') ? 'border-red-300 dark:border-red-300' : 'mb-4' %>">
+                        <% if(validationErrors.find(error => error.param === 'confirm-password')) { %>
+                            <div class="flex flex-col justify-start items-start text-left text-xs mt-2 mb-4 px-2 rounded-lg">
+                                <% errorMessage.find(error => { if(error.param === 'confirm-password') {const confirmpasswordError = error.msg %>
+                                <p class="text-red-500"><%= confirmpasswordError %></p>
+                                <% }}) %>
+                            </div>
+                        <% } %>
+                        <select name="role" id="role"
+                                value="<%= oldInput.role %>"
+                                class="border-b-2 w-full mt-2 py-2 px-3 inset-x-6 text-gray-700 leading-tight focus:outline-none focus:shadow-outline dark:bg-dark-primary-green dark:border-secondary-green dark:text-secondary-green
+                                    <%= validationErrors.find(error => error.param === 'role') ? 'border-red-300 dark:border-red-300' : '' %>">
+                            <option disabled selected value> Select a role</option>
+                            <option value="editor">Editor</option>
+                            <option value="moderator">Moderator</option>
+                        </select>
+                        <% if(validationErrors.find(error => error.param === 'role')) { %>
+                            <div class="flex flex-col justify-start items-start text-left text-xs mt-2 mb-4 px-2 rounded-lg">
+                                <% errorMessage.find(error => { if(error.param === 'role') {const roleError = error.msg %>
+                                <p class="text-red-500"><%= roleError %></p>
+                                <% }}) %>
+                            </div>
+                        <% } %>
+                        <input type="hidden" name="_csrf" value="<%= csrfToken %>">
+                        <div class="flex flex-col justify-center items-center">
+                            <button type="submit"
+                                    class="px-8 py-2 mt-8 rounded-lg bg-primary-green text-white dark:bg-secondary-green dark:text-dark-primary-green">
+                                Add Account
+                            </button>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<%- include('../includes/admin/footer.ejs') %>
