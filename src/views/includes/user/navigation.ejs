@@ -15,15 +15,16 @@
         <h1 class="text-2xl font-semibold tracking-widest text-primary-green dark:text-secondary-green">Grecycle</h1>
         <a id="hamburger-close" class="text-primary-green dark:text-secondary-green cursor-pointer">Close</a>
     </div>
-    <ul class="flex-1 pt-24 text-center text-2xl space-y-4">
-        <li class="text-primary-green dark:text-secondary-green px-6"><a href="/user/" class="">Home</a></li>
-        <li class="text-primary-green dark:text-secondary-green px-6"><a href="/user/account" class="">Account</a></li>
-        <li class="text-primary-green dark:text-secondary-green px-6"><a href="/user/cart" class="">Cart</a></li>
-        <li class="text-primary-green dark:text-secondary-green px-6"><a href="/user/order" class="">Orders</a></li>
-        <li class="text-primary-green dark:text-secondary-green px-6">
+    <ul class="flex-1 pt-24 text-center text-2xl space-y-4 font-semibold">
+        <li><a href="/user/" class="text-primary-green dark:text-secondary-green px-6">Home</a></li>
+        <li><a href="/user/account" class="text-primary-green dark:text-secondary-green px-6">Account</a></li>
+        <li><a href="/resources" class="text-primary-green dark:text-secondary-green px-6">Resources</a></li>
+        <li><a href="/user/cart" class="text-primary-green dark:text-secondary-green px-6">Cart</a></li>
+        <li><a href="/user/order" class="text-primary-green dark:text-secondary-green px-6">Orders</a></li>
+        <li>
             <form action="/logout" method="POST">
                 <input type="hidden" name="_csrf" value="<%= csrfToken %>">
-                <button type="submit" class="">Logout</button>
+                <button type="submit" class="text-primary-green dark:text-secondary-green px-6 font-semibold">Logout</button>
             </form>
         </li>
     </ul>
@@ -31,10 +32,17 @@
 <nav class="hidden lg:block flex justify-center items-center px-12 py-8 xl:px-24">
     <div class="text-xl mx-12 xl:text-2xl">
         <ul class="flex justify-center items-center font-semibold cursor-pointer">
-            <li class="text-primary-green dark:text-secondary-green px-6"><a href="/user/" class="">Home</a></li>
-            <li class="text-primary-green dark:text-secondary-green px-6"><a href="/user/account" class="">Account</a></li>
-            <li class="text-primary-green dark:text-secondary-green px-6"><a href="/user/cart" class="">Cart</a></li>
-            <li class="text-primary-green dark:text-secondary-green px-6"><a href="/user/order" class="">Orders</a></li>
+            <li><a href="/user/" class="text-primary-green dark:text-secondary-green px-6">Home</a></li>
+            <li><a href="/user/account" class="text-primary-green dark:text-secondary-green px-6">Account</a></li>
+            <li><a href="/resources" class="text-primary-green dark:text-secondary-green px-6">Resources</a></li>
+            <li><a href="/user/cart" class="text-primary-green dark:text-secondary-green px-6">Cart</a></li>
+            <li><a href="/user/order" class="text-primary-green dark:text-secondary-green px-6">Orders</a></li>
+            <li>
+                <form action="/logout" method="POST">
+                    <input type="hidden" name="_csrf" value="<%= csrfToken %>">
+                    <button type="submit" class="text-primary-green dark:text-secondary-green px-6 font-semibold">Logout</button>
+                </form>
+            </li>
         </ul>
     </div>
 </nav>

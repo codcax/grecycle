@@ -41,17 +41,7 @@ exports.getAdminIndex = (req, res, next) => {
             const error = new Error(err);
             error.httpStatusCode = 500;
             return next(error);
-        })
-
-    // Orders.find().populate('userId')
-    //     .then(orders => {
-    //         ordersList = orders;
-    //     })
-    //     .catch(err => {
-    //         const error = new Error(err);
-    //         error.httpStatusCode = 500;
-    //         return next(error);
-    //     })
+        });
 };
 
 exports.getAdminAccount = (req, res, next) => {
@@ -72,7 +62,7 @@ exports.getAdminAccount = (req, res, next) => {
             const error = new Error(err);
             error.httpStatusCode = 500;
             return next(error);
-        })
+        });
 };
 
 exports.postAdminAccount = (req, res, next) => {
@@ -154,7 +144,7 @@ exports.getAdminAccounts = (req, res, next) => {
             const error = new Error(err);
             error.httpStatusCode = 500;
             return next(error);
-        })
+        });
 };
 
 exports.getAddAdminAccount = (req, res, next) => {
@@ -283,7 +273,7 @@ exports.getResources = (req, res, next) => {
             const error = new Error(err);
             error.httpStatusCode = 500;
             return next(error);
-        })
+        });
 };
 
 exports.getAddResource = (req, res, next) => {
@@ -308,7 +298,6 @@ exports.postAddResource = (req, res, next) => {
                 pageTitle: 'Add Resources',
                 path: 'admin/resources/add',
                 oldInput: {name: name, price: price, status: status, image: image},
-                resourcesList: [],
                 errorMessage: errors.array(),
                 validationErrors: errors.array()
             });
@@ -370,7 +359,7 @@ exports.postEditResources = (req, res, next) => {
                         errorMessage: errors.array(),
                         validationErrors: errors.array()
                     });
-            })
+            });
     }
 
     if (submit === 'update') {
@@ -391,7 +380,7 @@ exports.postEditResources = (req, res, next) => {
             const error = new Error(err);
             error.httpStatusCode = 500;
             return next(error);
-        })
+        });
     } else if (submit === 'delete') {
         Resource.findById(resourceId)
             .then(resource => {

@@ -3,6 +3,7 @@ const {validationResult} = require('express-validator/check')
 
 //Custom imports
 const User = require('../models/user');
+const Resource = require('../models/resource');
 
 exports.getUserIndex = (req, res, next) => {
     res.render('user/index', {
@@ -65,6 +66,7 @@ exports.postUserAccount = (req, res, next) => {
                                 user.password = hashedPassword;
                                 user.username = newUsername;
                                 user.email = newEmail;
+                                user.cart = [];
                                 return user.save()
                                     .then(result => {
                                         res.redirect("/user/account");
@@ -94,15 +96,55 @@ exports.postUserAccount = (req, res, next) => {
             return next(error);
         });
 };
-//
-// exports.getUserCart = (req, res, next) => {
-//
-// }
-//
-// exports.postUserCart = (req, res, next) => {
-//
-// }
-//
-// exports.getUserOrder = (req, res, next) => {
-//
-// }
+
+exports.getUserCart = (req, res, next) => {
+    let resources;
+    let total = 0;
+
+    req.user.populate('cart.items.resourceId')
+        .then(user => {
+            cartItems = user.cart.items;
+            total = 0;
+            cartItems.forEach(item => {
+                total += item.quantity * item.resourceId.price;
+            });
+            res.render('user/cart', {
+                pageTitle: 'My Cart',
+                path: 'user/cart',
+                cartItems: cartItems,
+                total: total,
+            });
+        })
+        .catch(err => {
+            console.log(err)
+            const error = new Error(err);
+            error.httpStatusCode = 500;
+            return next(error);
+        });
+};
+
+exports.postUserCartDeleteItem = (req, res, next) => {
+    const resourceId = req.body.resourceId;
+
+    req.user.removeFromCart(resourceId)
+        .then(result => {
+            res.redirect('/user/cart');
+        })
+        .catch(err => {
+            const error = new Error(err);
+            error.httpStatusCode = 500;
+            return next(error);
+        });
+};
+
+exports.postUserCartClear = (req, res, next) => {
+    req.user.clearCart()
+        .then(result => {
+            res.redirect('/user/cart');
+        })
+        .catch(err => {
+            const error = new Error(err);
+            error.httpStatusCode = 500;
+            return next(error);
+        });
+};

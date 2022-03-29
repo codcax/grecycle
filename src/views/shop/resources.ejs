@@ -1,0 +1,43 @@
+<%- include('../includes/head.ejs') %>
+</head>
+<%- include('../includes/user/navigation.ejs') %>
+
+
+<div class="flex flex-grow">
+    <div class="flex flex-grow font-montserrat">
+        <div class="grid w-full px-2 py-12 mx-auto xl:px-24">
+            <div class="flex flex-col items-center m-4 p-4 rounded-lg lg:col-span-2">
+                <h1 class="text-primary-green dark:text-secondary-green p-2 md:text-lg">Resources</h1>
+                <% if(resourcesList.length <= 0) { %>
+                    <div class="flex justify-center items-center px-2 py-4 text-xs shadow-md rounded-lg dark:shadow-none">
+                        <h1 class="text-gray-700 text-center dark:text-dark-secondary-green">No resources.</h1>
+                    </div>
+                <% } %>
+                <div class="flex flex-wrap justify-center items-center gap-4">
+                    <% resourcesList.forEach((resource, index) => { %>
+                        <form action="resources" method="POST"
+                              class="flex flex-col gap-y-2 mt-4 text-xs items-center p-4 rounded-lg shadow-md md:text-sm dark:shadow-none dark:bg-tertiary-green"
+                              novalidate>
+                            <div class="flex justify-center items-center mb-4">
+                                <img src="/<%= resource.imagePath %>" alt="" class="h-20 w-auto">
+                            </div>
+                            <h1 class=""><%= resource.name %></h1>
+                            <h2 class=""><%= resource.price %> RM/kg</h2>
+                            <input type="number" name="quantity" class="appearance-none text-center border-2 rounded-lg p-2 text-gray-700 leading-tight focus:outline-none focus:shadow-outline dark:bg-tertiary-green
+                                  <%= (validationErrors.find(error => error.param === 'quantity') && validationErrors.find(error => error.param == resource._id)) ? 'border-red-300 dark:border-red-300' : 'dark:border-dark-secondary-green' %>"
+                                   placeholder="0 kg"
+                                   min="0" step="0.05">
+                            <input type="hidden" name="resourceId" value="<%= resource._id %>">
+                            <input type="hidden" name="_csrf" value="<%= csrfToken %>">
+                            <div class="">
+                                <button type="submit" class="bg-primary-green rounded-lg text-tertiary-green px-6 py-2 mt-4 mb-2">Add to Cart</button>
+                            </div>
+                        </form>
+                    <% }) %>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<%- include('../includes/user/footer.ejs') %>
