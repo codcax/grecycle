@@ -40,8 +40,11 @@ router.post('/account',
             .trim()
     ],
     isAuth, isUser, userController.postUserAccount);
-// router.get('/cart', isAuth, userController.getUserCart);
-// router.post('/cart', isAuth, userController.postUserCart);
+router.get('/cart', isAuth, isUser, userController.getUserCart);
+router.post('/cart-delete-item', isAuth, isUser, userController.postUserCartDeleteItem);
+router.post('/cart-clear', isAuth, isUser, userController.postUserCartClear);
+// router.get('/checkout', isAuth, isUser, userController.getUserCheckout);
+// router.post('/checkout', isAuth, isUser, userController.postUserCheckout);
 // router.get('/order', isAuth, userController.getUserOrder);
 
 
