@@ -43,7 +43,7 @@ router.post('/account',
 router.get('/cart', isAuth, isUser, userController.getUserCart);
 router.post('/cart-delete-item', isAuth, isUser, userController.postUserCartDeleteItem);
 router.post('/cart-clear', isAuth, isUser, userController.postUserCartClear);
-// router.get('/checkout', isAuth, isUser, userController.getUserCheckout);
+router.get('/checkout', isAuth, isUser, userController.getUserCheckout);
 // router.post('/checkout', isAuth, isUser, userController.postUserCheckout);
 // router.get('/order', isAuth, userController.getUserOrder);
 

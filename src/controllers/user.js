@@ -148,3 +148,26 @@ exports.postUserCartClear = (req, res, next) => {
             return next(error);
         });
 };
+
+exports.getUserCheckout = (req, res, next) => {
+    req.user.populate('cart.items.resourceId')
+        .then(user => {
+            cartItems = user.cart.items;
+            total = 0;
+            cartItems.forEach(item => {
+                total += item.quantity * item.resourceId.price;
+            });
+            res.render('user/checkout', {
+                pageTitle: 'Checkout',
+                path: 'user/checkout',
+                cartItems: cartItems,
+                total: total,
+            });
+        })
+        .catch(err => {
+            console.log(err)
+            const error = new Error(err);
+            error.httpStatusCode = 500;
+            return next(error);
+        });
+};
