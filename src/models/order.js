@@ -20,11 +20,11 @@ const orderSchema = new Schema({
         required: true
     },
     customer: {
-        firstName:{
+        firstName: {
             type: String,
             required: true
         },
-        lastName:{
+        lastName: {
             type: String,
             required: true
         },
@@ -37,7 +37,7 @@ const orderSchema = new Schema({
             required: true,
             ref: 'User'
         },
-        address: [{
+        address: {
             street: {
                 type: String,
                 required: true
@@ -54,11 +54,15 @@ const orderSchema = new Schema({
                 type: String,
                 required: true
             }
-        }],
+        },
         mobile: {
             type: String,
             required: true
         }
+    },
+    status:{
+        type: String,
+        required: true
     }
 });
 

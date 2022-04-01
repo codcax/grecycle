@@ -7,15 +7,15 @@
         <div class="grid w-full px-2 py-12 mx-auto xl:px-24">
             <% if(cartItems.length <= 0) { %>
                 <div class="flex flex-col items-center m-4 p-4 rounded-lg lg:col-span-2">
-                    <h1 class="text-primary-green dark:text-secondary-green p-2 mb-4 md:text-lg">Order Summary</h1>
+                    <h1 class="text-primary-green p-2 mb-4 md:text-lg">Order Summary</h1>
                     <div class="flex justify-center items-center p-12">
-                        <h1 class="text-gray-700 text-center dark:text-dark-secondary-green">Your cart is empty.</h1>
+                        <h1 class="text-gray-700 text-center">Your cart is empty.</h1>
                     </div>
                 </div>
             <% } else { %>
                 <div class="flex flex-col m-4 p-4 gap-4 rounded-lg lg:grid lg:grid-cols-3">
                     <div class="flex flex-col p-4 shadow-md rounded-lg dark:shadow-none dark:bg-tertiary-green">
-                        <h1 class="text-primary-green text-center dark:text-secondary-green p-2 mb-4 md:text-lg">Order
+                        <h1 class="text-primary-green text-center p-2 mb-4 md:text-lg">Order
                             Summary</h1>
                         <% cartItems.forEach((cartItem, index) => { %>
                             <div class="flex flex-col justify-center items-center">
@@ -52,9 +52,98 @@
                             </div>
                         </div>
                     </div>
-                    <div class="flex flex-col p-4 shadow-md rounded-lg lg:col-span-2 dark:shadow-none dark:bg-tertiary-green">
-                        <h1 class="text-primary-green text-center dark:text-secondary-green p-2 mb-4 md:text-lg">Order
+                    <div class="flex flex-col p-4 shadow-md rounded-lg lg:col-span-2 dark:shadow-none">
+                        <h1 class="text-primary-green text-center p-2 mb-4 md:text-lg dark:text-secondary-green">Order
                             Details</h1>
+                        <div class="flex justify-center items-center">
+                            <form action="/user/checkout" method="POST" novalidate
+                                  class="flex-1 px-2 pt-6 pb-8 mb-4 text-xs md:px-8 md:text-base">
+                                    <input type="text" name="firstname" id="firstname" placeholder="First Name"
+                                           value="<%= oldInput.firstname %>"
+                                           class="appearance-none border-b-2 w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline dark:bg-dark-primary-green dark:border-secondary-green dark:text-secondary-green
+                                    <%= validationErrors.find(error => error.param === 'firstname') ? 'border-red-300 dark:border-red-300' : 'mb-4' %>">
+                                    <% if(validationErrors.find(error => error.param === 'firstname')) { %>
+                                        <div class="flex flex-col justify-start items-start text-left text-xs mt-2 mb-4 px-2 rounded-lg">
+                                            <% errorMessage.find(error => { if(error.param === 'firstname') {const firstnameError = error.msg %>
+                                            <p class="text-red-500"><%= firstnameError %></p>
+                                            <% }}) %>
+                                        </div>
+                                    <% } %>
+                                    <input type="text" name="lastname" id="lastname" placeholder="Last Name"
+                                           value="<%= oldInput.lastname %>"
+                                           class="appearance-none border-b-2 w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline dark:bg-dark-primary-green dark:border-secondary-green dark:text-secondary-green
+                                    <%= validationErrors.find(error => error.param === 'lastname') ? 'border-red-300 dark:border-red-300' : 'mb-4' %>">
+                                    <% if(validationErrors.find(error => error.param === 'lastname')) { %>
+                                        <div class="flex flex-col justify-start items-start text-left text-xs mt-2 mb-4 px-2 rounded-lg">
+                                            <% errorMessage.find(error => { if(error.param === 'lastname') {const lastnameError = error.msg %>
+                                            <p class="text-red-500"><%= lastnameError %></p>
+                                            <% }}) %>
+                                        </div>
+                                    <% } %>
+                                <input type="text" name="street" id="street" placeholder="Address"
+                                       value="<%= oldInput.street %>"
+                                       class="appearance-none border-b-2 w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline dark:bg-dark-primary-green dark:border-secondary-green dark:text-secondary-green
+                                    <%= validationErrors.find(error => error.param === 'street') ? 'border-red-300 dark:border-red-300' : 'mb-4' %>">
+                                <% if(validationErrors.find(error => error.param === 'street')) { %>
+                                    <div class="flex flex-col justify-start items-start text-left text-xs mt-2 mb-4 px-2 rounded-lg">
+                                        <% errorMessage.find(error => { if(error.param === 'street') {const streetError = error.msg %>
+                                        <p class="text-red-500"><%= streetError %></p>
+                                        <% }}) %>
+                                    </div>
+                                <% } %>
+                                    <input type="number" name="postalcode" id="postalcode" placeholder="Postal Code"
+                                           value="<%= oldInput.postalcode %>"
+                                           class="appearance-none border-b-2 w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline dark:bg-dark-primary-green dark:border-secondary-green dark:text-secondary-green
+                                    <%= validationErrors.find(error => error.param === 'postalcode') ? 'border-red-300 dark:border-red-300' : 'mb-4' %>">
+                                    <% if(validationErrors.find(error => error.param === 'postalcode')) { %>
+                                        <div class="flex flex-col justify-start items-start text-left text-xs mt-2 mb-4 px-2 rounded-lg">
+                                            <% errorMessage.find(error => { if(error.param === 'postalcode') {const postalcodeError = error.msg %>
+                                            <p class="text-red-500"><%= postalcodeError %></p>
+                                            <% }}) %>
+                                        </div>
+                                    <% } %>
+                                    <input type="text" name="city" id="city" placeholder="City"
+                                           value="<%= oldInput.city %>"
+                                           class="appearance-none border-b-2 w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline dark:bg-dark-primary-green dark:border-secondary-green dark:text-secondary-green
+                                    <%= validationErrors.find(error => error.param === 'city') ? 'border-red-300 dark:border-red-300' : 'mb-4' %>">
+                                    <% if(validationErrors.find(error => error.param === 'city')) { %>
+                                        <div class="flex flex-col justify-start items-start text-left text-xs mt-2 mb-4 px-2 rounded-lg">
+                                            <% errorMessage.find(error => { if(error.param === 'city') {const cityError = error.msg %>
+                                            <p class="text-red-500"><%= cityError %></p>
+                                            <% }}) %>
+                                        </div>
+                                    <% } %>
+                                    <input type="text" name="country" id="country" placeholder="Country"
+                                           value="<%= oldInput.country %>"
+                                           class="appearance-none border-b-2 w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline dark:bg-dark-primary-green dark:border-secondary-green dark:text-secondary-green
+                                    <%= validationErrors.find(error => error.param === 'country') ? 'border-red-300 dark:border-red-300' : 'mb-4' %>">
+                                    <% if(validationErrors.find(error => error.param === 'country')) { %>
+                                        <div class="flex flex-col justify-start items-start text-left text-xs mt-2 mb-4 px-2 rounded-lg">
+                                            <% errorMessage.find(error => { if(error.param === 'country') {const countryError = error.msg %>
+                                            <p class="text-red-500"><%= countryError %></p>
+                                            <% }}) %>
+                                        </div>
+                                    <% } %>
+                                    <input type="number" name="mobile" id="mobile" placeholder="Contact Number"
+                                           value="<%= oldInput.mobile %>"
+                                           class="appearance-none border-b-2 w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline dark:bg-dark-primary-green dark:border-secondary-green dark:text-secondary-green
+                                    <%= validationErrors.find(error => error.param === 'mobile') ? 'border-red-300 dark:border-red-300' : 'mb-4' %>">
+                                    <% if(validationErrors.find(error => error.param === 'mobile')) { %>
+                                        <div class="flex flex-col justify-start items-start text-left text-xs mt-2 mb-4 px-2 rounded-lg">
+                                            <% errorMessage.find(error => { if(error.param === 'mobile') {const mobileError = error.msg %>
+                                            <p class="text-red-500"><%= mobileError %></p>
+                                            <% }}) %>
+                                        </div>
+                                    <% } %>
+                                <input type="hidden" name="_csrf" value="<%= csrfToken %>">
+                                <div class="flex flex-col justify-center items-center">
+                                    <button type="submit"
+                                            class="px-8 py-2 mt-8 rounded-lg bg-primary-green text-white dark:bg-secondary-green dark:text-dark-primary-green">
+                                        Place Order
+                                    </button>
+                                </div>
+                            </form>
+                        </div>
                     </div>
                 </div>
             <% } %>
