@@ -8,6 +8,7 @@ const Resource = require('../models/resource');
 const bcrypt = require('bcryptjs')
 const emailTemplates = require('../emails/auth');
 const fileHelper = require('../utils/file');
+const Order = require("../models/order");
 
 //Define constants
 
@@ -24,6 +25,12 @@ exports.getAdminIndex = (req, res, next) => {
             return User.find({admin: false})
                 .then(customers => {
                     customersList = customers;
+                })
+        })
+        .then(result => {
+            return Order.find()
+                .then(orders => {
+                    ordersList = orders;
                 })
         })
         .then(result => {
@@ -368,7 +375,7 @@ exports.postEditResources = (req, res, next) => {
                 resource.name = name;
                 resource.price = price;
                 resource.status = status;
-                if(image){
+                if (image) {
                     fileHelper.deleteFile(resource.imagePath);
                     resource.imagePath = image.path;
                 }
@@ -403,3 +410,73 @@ exports.postEditResources = (req, res, next) => {
     }
 };
 
+exports.getAdminOrders = (req, res, next) => {
+    Order.find()
+        .then(orders => {
+            res.render('admin/orders', {
+                pageTitle: 'All Orders',
+                path: 'admin/orders',
+                orders: orders,
+            });
+        })
+        .catch(err => {
+            const error = new Error(err);
+            error.httpStatusCode = 500;
+            return next(error);
+        });
+};
+
+exports.getAdminOrder = (req, res, next) => {
+    const orderId = req.params.orderId;
+    Order.findById(orderId)
+        .then(order => {
+            res.render('admin/order', {
+                pageTitle: 'Order',
+                path: 'admin/orders/' + orderId,
+                order: order,
+                validationErrors: []
+            });
+        })
+        .catch(err => {
+            const error = new Error(err);
+            error.httpStatusCode = 500;
+            return next(error);
+        });
+};
+
+exports.postAdminOrder = (req, res, next) => {
+    const orderId = req.params.orderId;
+    const status = req.body.status;
+
+    const errors = validationResult(req);
+    if (!errors.isEmpty()) {
+        return Order.findById(orderId)
+            .then(order => {
+                res.render('admin/order', {
+                    pageTitle: 'Order',
+                    path: 'admin/orders/' + orderId,
+                    order: order,
+                    validationErrors: errors.array()
+                });
+            })
+            .catch(err => {
+                const error = new Error(err);
+                error.httpStatusCode = 500;
+                return next(error);
+            });
+    }
+
+    Order.findById(orderId)
+        .then(order => {
+            order.status = status;
+            return order.save()
+        })
+        .then(result => {
+            res.redirect('/admin/orders/' + orderId)
+        })
+        .catch(err => {
+            const error = new Error(err);
+            error.httpStatusCode = 500;
+            return next(error);
+        });
+};

@@ -4,18 +4,42 @@
 
 <div class="flex flex-grow">
     <div class="flex flex-grow font-montserrat">
-        <div class="grid grid-flow-rows-3 w-full mt-12 px-2 py-12 mx-auto lg:mt-0 lg:grid-rows-none lg:grid-cols-3 xl:px-24">
-            <div class="flex flex-col items-center m-4 p-4 rounded-lg shadow-md dark:shadow-none">
-                <h1 class="text-primary-green dark:text-secondary-green p-2 md:text-lg">My Account</h1>
-                <div class="m-2 w-full dark:border-t-2 dark:border-secondary-green"></div>
+        <div class="grid grid-flow-rows-2 w-full mt-12 px-2 py-12 mx-auto text-xs md:text-sm lg:mt-0 lg:grid-rows-none lg:grid-cols-2 xl:px-24">
+            <div class="flex flex-col items-center m-4 p-4 md:px-8 rounded-lg shadow-md dark:shadow-none">
+                <h1 class="text-primary-green dark:text-secondary-green p-2 mb-4 md:text-lg">Highlights</h1>
+                <% if(highlights.length <= 0) { %>
+                    <div class="flex w-full justify-center items-center px-2 py-4 text-sm">
+                        <h1 class="text-gray-700 text-center dark:text-dark-secondary-green">No highlights available
+                            currently.</h1>
+                    </div>
+                <% } %>
+                <% highlights.forEach((item, index) => { %>
+                    <div class="grid grid-cols-2 w-full border-b-2 mb-3 py-1 border-grey text-center dark:border-secondary-green ">
+                        <h1 class="break-words text-gray-700 dark:text-dark-secondary-green"><%= item.title %></h1>
+                        <h1 class="break-words text-gray-700 dark:text-dark-secondary-green"><%= item.excerpt %></h1>
+                    </div>
+                <% }) %>
+                <div class="px-8 py-2 mt-8 rounded-lg bg-primary-green dark:bg-secondary-green">
+                    <a href="/user/" class="text-white dark:text-dark-primary-green">Check
+                        Newsletters</a>
+                </div>
             </div>
             <div class="flex flex-col items-center m-4 p-4 rounded-lg shadow-md dark:shadow-none">
-                <h1 class="text-primary-green dark:text-secondary-green p-2 md:text-lg">My Orders</h1>
-                <div class="m-2 w-full dark:border-t-2 dark:border-secondary-green"></div>
-            </div>
-            <div class="flex flex-col items-center m-4 p-4 rounded-lg shadow-md dark:shadow-none">
-                <h1 class="text-primary-green dark:text-secondary-green p-2 md:text-lg">History</h1>
-                <div class="m-2 w-full dark:border-t-2 dark:border-secondary-green"></div>
+                <h1 class="text-primary-green dark:text-secondary-green p-2 mb-4 md:text-lg">Orders</h1>
+                <% if(ordersList.length <= 0) { %>
+                    <div class="flex w-full justify-center items-center px-2 py-4 text-sm">
+                        <h1 class="text-gray-700 text-center dark:text-dark-secondary-green">No orders.</h1>
+                    </div>
+                <% } %>
+                <% ordersList.forEach((order, index) => { %>
+                    <div class="grid grid-cols-2 w-full border-b-2 mb-3 py-1 border-grey text-center dark:border-secondary-green ">
+                        <h1 class="break-words text-gray-700 dark:text-dark-secondary-green"><%= order._id %></h1>
+                        <h1 class="break-words text-gray-700 dark:text-dark-secondary-green"><%= order.status %></h1>
+                    </div>
+                <% }) %>
+                <div class="px-8 py-2 mt-8 rounded-lg bg-primary-green dark:bg-secondary-green">
+                    <a href="/user/orders" class="text-white dark:text-dark-primary-green">Manage Orders</a>
+                </div>
             </div>
         </div>
     </div>

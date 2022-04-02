@@ -1,0 +1,69 @@
+<%- include('../includes/head.ejs') %>
+</head>
+<%- include('../includes/admin/navigation.ejs') %>
+
+<div class="h-screen font-montserrat px-2 py-12 xl:px-24">
+    <h1 class="text-primary-green text-center dark:text-secondary-green p-2 mb-4 md:text-lg">All Orders</h1>
+    <div class="flex flex-col">
+        <div class="overflow-x-auto sm:-mx-6 lg:-mx-8">
+            <div class="py-2 inline-block min-w-full sm:px-6 lg:px-8">
+                <div class="overflow-hidden">
+                    <table class="min-w-full text-sm text-left text-gray-500">
+                        <thead class="text-xs text-gray-700 uppercase bg-gray-50 dark:bg-primary-green">
+                        <tr>
+                            <th scope="col" class="px-6 py-3 dark:text-tertiary-green">
+                                Date
+                            </th>
+                            <th scope="col" class="px-6 py-3 dark:text-tertiary-green">
+                                Order Id
+                            </th>
+                            <th scope="col" class="px-6 py-3 dark:text-tertiary-green">
+                                Email
+                            </th>
+                            <th scope="col" class="px-6 py-3 dark:text-tertiary-green">
+                                Amount
+                            </th>
+                            <th scope="col" class="px-6 py-3 dark:text-tertiary-green">
+                                Status
+                            </th>
+                            <th scope="col" class="px-6 py-3 dark:text-tertiary-green">
+
+                            </th>
+                        </tr>
+                        </thead>
+                        <tbody>
+                        <% orders.forEach(order =>{ %>
+                            <tr class="bg-white border-b dark:bg-tertiary-green dark:border-secondary-green">
+                                <th scope="row"
+                                    class="px-6 py-4 font-medium text-gray-900 dark:text-dark-primary-green whitespace-nowrap">
+                                    <%= order.date.toDateString() %>
+                                </th>
+                                <th scope="row"
+                                    class="px-6 py-4 font-medium text-gray-900 dark:text-dark-primary-green whitespace-nowrap">
+                                    <%= order._id %>
+                                </th>
+                                <td class="px-6 py-4 dark:text-dark-primary-green">
+                                    <%= order.customer.email %>
+                                </td>
+                                <td class="px-6 py-4 dark:text-dark-primary-green">
+                                    RM <%= order.totalAmount.toFixed(2) %>
+                                </td>
+                                <td class="px-6 py-4 dark:text-dark-primary-green">
+                                    <%= order.status %>
+                                </td>
+                                <td class="px-6 py-4 text-right dark:text-dark-primary-green">
+                                    <a href="/admin/orders/<%= order._id %>"
+                                       class="font-medium text-blue-600 dark:text-blue-500 hover:underline">View</a>
+                                </td>
+                            </tr>
+                        <% }) %>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+
+<%- include('../includes/admin/footer.ejs') %>

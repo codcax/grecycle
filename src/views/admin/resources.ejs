@@ -6,7 +6,7 @@
     <div class="flex flex-grow font-montserrat">
         <div class="grid w-full px-2 py-12 mx-auto xl:px-24">
             <div class="flex flex-col items-center m-4 p-4 rounded-lg lg:col-span-2">
-                <a href="/admin/resources/add" class="bg-primary-green rounded-lg text-tertiary-green px-6 py-2 mb-4 md:text-lg">Add Resources</a>
+                <h1 class="text-primary-green dark:text-secondary-green p-2 mb-4 md:text-lg">Resources</h1>
                 <% if(resourcesList.length <= 0) { %>
                     <div class="flex justify-center items-center px-2 py-4 text-xs shadow-md rounded-lg dark:shadow-none">
                         <h1 class="text-gray-700 text-center dark:text-dark-secondary-green">No resources.</h1>
@@ -70,6 +70,7 @@
                         </form>
                     <% }) %>
                 </div>
+                    <a href="/admin/resources/add" class="bg-primary-green rounded-lg text-tertiary-green px-6 py-2 mt-8 md:text-lg">Add Resources</a>
             </div>
         </div>
     </div>

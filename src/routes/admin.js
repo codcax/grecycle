@@ -80,15 +80,15 @@ router.post('/admin-accounts/edit/:adminId', isAuth, isAdmin, adminController.po
 router.get('/resources', isAuth, isAdmin, adminController.getResources);
 router.get('/resources/add', isAuth, isAdmin, adminController.getAddResource);
 router.post('/resources/add', [
-        body('name', 'Name is invalid.')
-            .isLength({min: 5})
-            .isString()
-            .trim(),
-        body('price', 'Price is invalid.')
-            .isFloat({ gt: 0.0 }),
-        body('status', 'Status is required.')
-            .isIn(['active', 'inactive'])
-    ], isAuth, isAdmin, adminController.postAddResource);
+    body('name', 'Name is invalid.')
+        .isLength({min: 5})
+        .isString()
+        .trim(),
+    body('price', 'Price is invalid.')
+        .isFloat({gt: 0.0}),
+    body('status', 'Status is required.')
+        .isIn(['active', 'inactive'])
+], isAuth, isAdmin, adminController.postAddResource);
 router.post('/resources/edit/:resourceId',
     [
         body('name', 'Name is invalid.')
@@ -96,11 +96,16 @@ router.post('/resources/edit/:resourceId',
             .isString()
             .trim(),
         body('price', 'Price is invalid.')
-            .isFloat({ gt: 0.0 }),
+            .isFloat({gt: 0.0}),
         body('status', 'Status is required.')
             .isIn(['active', 'inactive'])
     ],
     isAuth, isAdmin, adminController.postEditResources);
-
+router.get('/orders', isAuth, isAdmin, adminController.getAdminOrders);
+router.get('/orders/:orderId', isAuth, isAdmin, adminController.getAdminOrder);
+router.post('/orders/:orderId', [
+    body('status', 'Status is invalid.')
+        .isIn(['received', 'cancelled', 'en-route', 'resource collected', 'completed'])
+], isAuth, isAdmin, adminController.postAdminOrder);
 
 module.exports = router;
