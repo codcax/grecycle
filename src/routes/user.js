@@ -72,7 +72,8 @@ router.post('/checkout', [
         .isLength(({min:10 , max:10}))
         .trim(),
 ], isAuth, isUser, userController.postUserCheckout);
-router.get('/order', isAuth, userController.getUserOrder);
+router.get('/orders', isAuth, userController.getUserOrders);
+router.get('/orders/:orderId', isAuth, userController.getUserOrder);
 
 
 module.exports = router;

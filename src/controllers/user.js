@@ -236,6 +236,7 @@ exports.postUserCheckout = (req, res, next) => {
         })
         .then(result => {
             const order = new Order({
+                date: new Date(),
                 resources: resources,
                 totalAmount: total,
                 customer: {
@@ -269,13 +270,31 @@ exports.postUserCheckout = (req, res, next) => {
 
 };
 
-exports.getUserOrder = (req, res, next) => {
-    Order.find({customer: {userId: req.user}})
+exports.getUserOrders = (req, res, next) => {
+    Order.find({'customer.userId': req.user._id})
         .then(orders => {
-            res.render('user/order', {
+            res.render('user/orders', {
                 pageTitle: 'My Orders',
-                path: 'user/order',
+                path: 'user/orders',
                 orders: orders,
+            });
+        })
+        .catch(err => {
+            const error = new Error(err);
+            error.httpStatusCode = 500;
+            return next(error);
+        });
+};
+
+exports.getUserOrder = (req, res, next) => {
+    const orderId = req.params.orderId;
+
+    Order.findById(orderId)
+        .then(order => {
+            res.render('user/order', {
+                pageTitle: 'My Order',
+                path: 'user/orders',
+                order: order,
             });
         })
         .catch(err => {
