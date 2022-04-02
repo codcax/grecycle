@@ -43,9 +43,37 @@ router.post('/account',
 router.get('/cart', isAuth, isUser, userController.getUserCart);
 router.post('/cart-delete-item', isAuth, isUser, userController.postUserCartDeleteItem);
 router.post('/cart-clear', isAuth, isUser, userController.postUserCartClear);
-// router.get('/checkout', isAuth, isUser, userController.getUserCheckout);
-// router.post('/checkout', isAuth, isUser, userController.postUserCheckout);
-// router.get('/order', isAuth, userController.getUserOrder);
+router.get('/checkout', isAuth, isUser, userController.getUserCheckout);
+router.post('/checkout', [
+    body('firstname', 'First name must only contain letters and min length of 5.')
+        .isLength({min: 5})
+        .isString()
+        .trim(),
+    body('lastname', 'Last name must only contain letters and min length of 5.')
+        .isLength({min: 5})
+        .isString()
+        .trim(),
+    body('street', 'Address is invalid.')
+        .not().isEmpty()
+        .exists()
+        .trim(),
+    body('postalcode', 'Postal code is invalid.')
+        .isNumeric()
+        .trim(),
+    body('city', 'City is invalid.')
+        .not().isEmpty()
+        .isString()
+        .trim(),
+    body('country', 'Country is invalid.')
+        .not().isEmpty()
+        .isString()
+        .trim(),
+    body('mobile', 'Contact number is invalid.')
+        .isLength(({min:10 , max:10}))
+        .trim(),
+], isAuth, isUser, userController.postUserCheckout);
+router.get('/orders', isAuth, userController.getUserOrders);
+router.get('/orders/:orderId', isAuth, userController.getUserOrder);
 
 
 module.exports = router;
