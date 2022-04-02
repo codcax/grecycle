@@ -28,6 +28,12 @@ exports.getAdminIndex = (req, res, next) => {
                 })
         })
         .then(result => {
+            return Order.find()
+                .then(orders => {
+                    ordersList = orders;
+                })
+        })
+        .then(result => {
             res.render('admin/index', {
                 pageTitle: 'Home',
                 path: 'admin/',
@@ -426,7 +432,7 @@ exports.getAdminOrder = (req, res, next) => {
         .then(order => {
             res.render('admin/order', {
                 pageTitle: 'Order',
-                path: 'admin/orders/'+ orderId,
+                path: 'admin/orders/' + orderId,
                 order: order,
                 validationErrors: []
             });
@@ -466,7 +472,7 @@ exports.postAdminOrder = (req, res, next) => {
             return order.save()
         })
         .then(result => {
-            res.redirect('/admin/orders/'+ orderId)
+            res.redirect('/admin/orders/' + orderId)
         })
         .catch(err => {
             const error = new Error(err);
