@@ -7,12 +7,16 @@ const Order = require('../models/order');
 const Resource = require('../models/resource');
 
 exports.getUserIndex = (req, res, next) => {
-    res.render('user/index', {
-        pageTitle: 'Home',
-        path: 'user/',
-        oldInput: {},
-        validationErrors: []
-    });
+    const userId = req.user._id;
+    Order.find({'customer.userId': userId})
+        .then(orders => {
+            res.render('user/index', {
+                pageTitle: 'Home',
+                path: 'user/',
+                ordersList: orders,
+                highlights: []
+            });
+        })
 };
 
 exports.getUserAccount = (req, res, next) => {
