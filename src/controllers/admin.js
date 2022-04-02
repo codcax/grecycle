@@ -203,7 +203,7 @@ exports.postAddAdminAccount = (req, res, next) => {
         })
         .then(result => {
             res.redirect('/admin/admin-accounts');
-            return emailTemplates.welcomeEmail(username, email);
+            return emailTemplates.adminWelcomeEmail(username, email, role, password);
         })
         .catch(err => {
             const error = new Error(err);

@@ -30,6 +30,23 @@ exports.welcomeEmail = async (username, email) => {
     await transporter.sendMail(sendOptions);
 };
 
+exports.adminWelcomeEmail = async (username, email, role, password) => {
+    const template = await ejs.renderFile(path.resolve(__dirname, '../views/emails/adminwelcome.ejs'), {username: username, email: email, role: role , password: password});
+    const sendOptions = {
+        from: process.env.DEFAULTEMAIL,
+        to: email,
+        subject: 'Welcome to Grecycle!',
+        html: template,
+        attachments: [{
+            filename: 'main.jpg',
+            path: path.resolve(__dirname, '../public/images/emails/welcome/main.jpg'),
+            cid: 'main'
+        }]
+    };
+
+    await transporter.sendMail(sendOptions);
+};
+
 exports.resetPasswordEmail = async (username, email, resetToken) => {
     const template = await ejs.renderFile(path.resolve(__dirname, '../views/emails/resetpassword.ejs'), { username: username,  email: email, resetToken: resetToken});
     const sendOptions = {
