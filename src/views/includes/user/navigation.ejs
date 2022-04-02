@@ -1,37 +1,23 @@
 <body class="h-screen flex flex-col dark:bg-dark-primary-green">
-<div class="fixed z-10 top-4 right-4 md:top-8 md:right-8 h-10">
-    <img src="/images/sun-img.svg" alt="" class="h-10 sun cursor-pointer">
-    <img src="/images/moon-img.svg" alt="" class="h-8 moon cursor-pointer">
-</div>
-<div id="hamburger-icon"
-     class="fixed z-10 top-4 left-4 h-10 w-10 px-1 py-2 space-y-1.5 cursor-pointer md:top-8 md:left-8 lg:hidden">
-    <div class="bg-primary-green h-0.5 rounded-md dark:bg-secondary-green"></div>
-    <div class="bg-primary-green h-0.5 w-2/3 rounded-md dark:bg-secondary-green"></div>
-    <div class="bg-primary-green h-0.5 rounded-md dark:bg-secondary-green"></div>
-</div>
-<div id="mobile-menu"
-     class="z-20 absolute h-screen w-screen flex flex-col justify-center items-center p-8 bg-white transform -translate-x-full transition duration-500 ease-out dark:bg-dark-primary-green">
-    <div class="flex w-full pb-4 px-4 justify-between items-center border-b-2 border-primary-green dark:border-secondary-green">
-        <h1 class="text-2xl font-semibold tracking-widest text-primary-green dark:text-secondary-green">Grecycle</h1>
-        <a id="hamburger-close" class="text-primary-green dark:text-secondary-green cursor-pointer">Close</a>
+<div class="bg-gray-50 dark:bg-header-green">
+    <div class="fixed z-10 top-4 right-4 md:top-8 md:right-8 h-10">
+        <img src="/images/sun-img.svg" alt="" class="h-10 sun cursor-pointer">
+        <img src="/images/moon-img.svg" alt="" class="h-8 moon cursor-pointer">
     </div>
-    <ul class="flex-1 pt-24 text-center text-2xl space-y-4 font-semibold">
-        <li><a href="/user/" class="text-primary-green dark:text-secondary-green px-6">Home</a></li>
-        <li><a href="/user/account" class="text-primary-green dark:text-secondary-green px-6">Account</a></li>
-        <li><a href="/resources" class="text-primary-green dark:text-secondary-green px-6">Resources</a></li>
-        <li><a href="/user/cart" class="text-primary-green dark:text-secondary-green px-6">Cart</a></li>
-        <li><a href="/user/orders" class="text-primary-green dark:text-secondary-green px-6">Orders</a></li>
-        <li>
-            <form action="/logout" method="POST">
-                <input type="hidden" name="_csrf" value="<%= csrfToken %>">
-                <button type="submit" class="text-primary-green dark:text-secondary-green px-6 font-semibold">Logout</button>
-            </form>
-        </li>
-    </ul>
-</div>
-<nav class="hidden lg:block flex justify-center items-center px-12 py-8 xl:px-24">
-    <div class="text-xl mx-12 xl:text-2xl">
-        <ul class="flex justify-center items-center font-semibold cursor-pointer">
+    <div id="hamburger-icon"
+         class="fixed z-10 top-4 left-4 h-10 w-10 px-1 py-2 space-y-1.5 cursor-pointer md:top-8 md:left-8 lg:hidden">
+        <div class="bg-primary-green h-0.5 rounded-md dark:bg-secondary-green"></div>
+        <div class="bg-primary-green h-0.5 w-2/3 rounded-md dark:bg-secondary-green"></div>
+        <div class="bg-primary-green h-0.5 rounded-md dark:bg-secondary-green"></div>
+    </div>
+    <div id="mobile-menu"
+         class="z-20 absolute h-screen w-screen flex flex-col justify-center items-center p-8 bg-white transform -translate-x-full transition duration-500 ease-out dark:bg-dark-primary-green">
+        <div class="flex w-full pb-4 px-4 justify-between items-center border-b-2 border-primary-green dark:border-secondary-green">
+            <h1 class="text-2xl font-semibold tracking-widest text-primary-green dark:text-secondary-green">
+                Grecycle</h1>
+            <a id="hamburger-close" class="text-primary-green dark:text-secondary-green cursor-pointer">Close</a>
+        </div>
+        <ul class="flex-1 pt-24 text-center text-2xl space-y-4 font-semibold">
             <li><a href="/user/" class="text-primary-green dark:text-secondary-green px-6">Home</a></li>
             <li><a href="/user/account" class="text-primary-green dark:text-secondary-green px-6">Account</a></li>
             <li><a href="/resources" class="text-primary-green dark:text-secondary-green px-6">Resources</a></li>
@@ -40,9 +26,30 @@
             <li>
                 <form action="/logout" method="POST">
                     <input type="hidden" name="_csrf" value="<%= csrfToken %>">
-                    <button type="submit" class="text-primary-green dark:text-secondary-green px-6 font-semibold">Logout</button>
+                    <button type="submit" class="text-primary-green dark:text-secondary-green px-6 font-semibold">
+                        Logout
+                    </button>
                 </form>
             </li>
         </ul>
     </div>
-</nav>
+    <nav class="hidden lg:block flex justify-center items-center px-12 py-8 xl:px-24">
+        <div class="text-xl mx-12 xl:text-2xl">
+            <ul class="flex justify-center items-center font-semibold cursor-pointer">
+                <li><a href="/user/" class="text-primary-green dark:text-secondary-green px-6">Home</a></li>
+                <li><a href="/user/account" class="text-primary-green dark:text-secondary-green px-6">Account</a></li>
+                <li><a href="/resources" class="text-primary-green dark:text-secondary-green px-6">Resources</a></li>
+                <li><a href="/user/cart" class="text-primary-green dark:text-secondary-green px-6">Cart</a></li>
+                <li><a href="/user/orders" class="text-primary-green dark:text-secondary-green px-6">Orders</a></li>
+                <li>
+                    <form action="/logout" method="POST">
+                        <input type="hidden" name="_csrf" value="<%= csrfToken %>">
+                        <button type="submit" class="text-primary-green dark:text-secondary-green px-6 font-semibold">
+                            Logout
+                        </button>
+                    </form>
+                </li>
+            </ul>
+        </div>
+    </nav>
+</div>
