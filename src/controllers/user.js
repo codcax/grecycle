@@ -252,7 +252,7 @@ exports.postUserCheckout = (req, res, next) => {
                     },
                     mobile: mobile
                 },
-                status: 'Received'
+                status: 'received'
             });
             return order.save();
         })
