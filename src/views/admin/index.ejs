@@ -20,10 +20,12 @@
                 <% }) %>
                 <div class="grid grid-rows-2 justify-center items-center text-center mt-8 gap-4 sm:grid-cols-2">
                     <div class="px-8 py-2 rounded-lg bg-primary-green dark:bg-secondary-green">
-                        <a href="/admin/admin-accounts/add" class="text-white dark:text-dark-primary-green">Add Admins</a>
+                        <a href="/admin/admin-accounts/add" class="text-white dark:text-dark-primary-green">Add
+                            Admins</a>
                     </div>
                     <div class="px-8 py-2 rounded-lg bg-primary-green dark:bg-secondary-green">
-                        <a href="/admin/admin-accounts" class="text-white dark:text-dark-primary-green">Manage Admins</a>
+                        <a href="/admin/admin-accounts" class="text-white dark:text-dark-primary-green">Manage
+                            Admins</a>
                     </div>
                 </div>
             </div>
@@ -40,10 +42,10 @@
                         <h1 class="break-words text-gray-700 dark:text-dark-secondary-green"><%= customer.email %></h1>
                     </div>
                 <% }) %>
-<!--                <div class="px-8 py-2 mt-8 rounded-lg bg-primary-green dark:bg-secondary-green">-->
-<!--                    <a href="/admin/customer-accounts" class="text-white dark:text-dark-primary-green">Manage-->
-<!--                        Customers</a>-->
-<!--                </div>-->
+                <!--                <div class="px-8 py-2 mt-8 rounded-lg bg-primary-green dark:bg-secondary-green">-->
+                <!--                    <a href="/admin/customer-accounts" class="text-white dark:text-dark-primary-green">Manage-->
+                <!--                        Customers</a>-->
+                <!--                </div>-->
             </div>
             <div class="flex flex-col items-center m-4 p-4 rounded-lg shadow-md dark:shadow-none">
                 <h1 class="text-primary-green dark:text-secondary-green p-2 mb-4 md:text-lg">Orders</h1>
@@ -65,5 +67,15 @@
         </div>
     </div>
 </div>
+<% if(snackbar) { %>
+    <div id="snackbar" class="fixed z-10 bottom-5 flex justify-center items-center p-4 display-none">
+        <div class="bg-teal-100 border-t-4 border-teal-500 rounded-b text-teal-900 px-4 py-3 shadow-md">
+            <div>
+                <p class="font-bold">Howdy <%= snackbar.username %>,</p>
+                <p class="text-sm"><%= snackbar.message %></p>
+            </div>
+        </div>
+    </div>
+<% } %>
 
 <%- include('../includes/admin/footer.ejs') %>
