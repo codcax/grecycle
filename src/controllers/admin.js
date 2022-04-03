@@ -41,7 +41,11 @@ exports.getAdminIndex = (req, res, next) => {
                 adminsList: adminsList,
                 customersList: customersList,
                 ordersList: ordersList,
-                validationErrors: []
+                validationErrors: [],
+                snackbar: {
+                    username: req.user.username,
+                    message: 'Welcome to Grecycle, it\'s another day to save the Earth!'
+                }
             });
         })
         .catch(err => {
@@ -203,7 +207,7 @@ exports.postAddAdminAccount = (req, res, next) => {
         })
         .then(result => {
             res.redirect('/admin/admin-accounts');
-            return emailTemplates.welcomeEmail(username, email);
+            // return emailTemplates.adminWelcomeEmail(username, email, role, password);
         })
         .catch(err => {
             const error = new Error(err);

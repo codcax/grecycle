@@ -14,7 +14,11 @@ exports.getUserIndex = (req, res, next) => {
                 pageTitle: 'Home',
                 path: 'user/',
                 ordersList: orders,
-                highlights: []
+                highlights: [],
+                snackbar: {
+                    username: req.user.username,
+                    message: 'Welcome to Grecycle, it\'s another day to save the Earth!'
+                }
             });
         })
 };

@@ -13,12 +13,12 @@ const transporter = nodemailer.createTransport(sendgridTransport({
     }
 }));
 
-exports.welcomeEmail = async (username, email) => {
-    const template = await ejs.renderFile(path.resolve(__dirname, '../views/emails/welcome.ejs'), {username: username});
+exports.orderEmail = async (username, email, order) => {
+    const template = await ejs.renderFile(path.resolve(__dirname, '../views/emails/order.ejs'), {username: username, order:order});
     const sendOptions = {
         from: process.env.DEFAULTEMAIL,
         to: email,
-        subject: 'Welcome to Grecycle!',
+        subject: 'Order Summary!',
         html: template,
         attachments: [{
             filename: 'main.jpg',
@@ -30,12 +30,12 @@ exports.welcomeEmail = async (username, email) => {
     await transporter.sendMail(sendOptions);
 };
 
-exports.adminWelcomeEmail = async (username, email, role, password) => {
-    const template = await ejs.renderFile(path.resolve(__dirname, '../views/emails/adminwelcome.ejs'), {username: username, email: email, role: role , password: password});
+exports.orderStatusEmail = async (username, email, order) => {
+    const template = await ejs.renderFile(path.resolve(__dirname, '../views/emails/orderStatus.ejs'), {username: username, order:order});
     const sendOptions = {
         from: process.env.DEFAULTEMAIL,
         to: email,
-        subject: 'Welcome to Grecycle!',
+        subject: 'Order Summary!',
         html: template,
         attachments: [{
             filename: 'main.jpg',
@@ -46,17 +46,4 @@ exports.adminWelcomeEmail = async (username, email, role, password) => {
 
     await transporter.sendMail(sendOptions);
 };
-
-exports.resetPasswordEmail = async (username, email, resetToken) => {
-    const template = await ejs.renderFile(path.resolve(__dirname, '../views/emails/resetpassword.ejs'), { username: username,  email: email, resetToken: resetToken});
-    const sendOptions = {
-        from: process.env.DEFAULTEMAIL,
-        to: email,
-        subject: 'Password reset',
-        html: template
-    };
-
-    await transporter.sendMail(sendOptions);
-};
-
 

@@ -44,5 +44,15 @@
         </div>
     </div>
 </div>
+<% if(snackbar) { %>
+    <div id="snackbar" class="fixed z-10 bottom-5 flex justify-center items-center p-4 display-none">
+        <div class="bg-teal-100 border-t-4 border-teal-500 rounded-b text-teal-900 px-4 py-3 shadow-md">
+            <div>
+                <p class="font-bold">Howdy <%= snackbar.username %>,</p>
+                <p class="text-sm"><%= snackbar.message %></p>
+            </div>
+        </div>
+    </div>
+<% } %>
 
 <%- include('../includes/user/footer.ejs') %>
