@@ -48,7 +48,8 @@ exports.adminWelcomeEmail = async (username, email, role, password) => {
 };
 
 exports.resetPasswordEmail = async (username, email, resetToken) => {
-    const template = await ejs.renderFile(path.resolve(__dirname, '../views/emails/resetpassword.ejs'), { username: username,  email: email, resetToken: resetToken});
+    const domainURL = process.env.DOMAINURL;
+    const template = await ejs.renderFile(path.resolve(__dirname, '../views/emails/resetpassword.ejs'), { username: username,  email: email, resetToken: resetToken, domainURL: domainURL});
     const sendOptions = {
         from: process.env.DEFAULTEMAIL,
         to: email,
