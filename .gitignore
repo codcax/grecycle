@@ -6,7 +6,10 @@ yarn-debug.log*
 yarn-error.log*
 lerna-debug.log*
 
-#
+# Ignore IDE related folders
+.idea
+
+# Ignore uploaded resource images folders
 src/images/resources/*
 !src/images/resources/.gitkeep
 
