@@ -1,2 +1,0 @@
-# grecycle
-E-waste app
